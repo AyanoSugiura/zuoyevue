@@ -3,7 +3,7 @@
            label-width="0px" >
     <h3 class="login_title">系统登录</h3>
     <el-form-item prop="phone">
-      <el-input type="text" v-model="loginForm.phone" auto-complete="off" placeholder="账号"></el-input>
+      <el-input type="text" v-model="loginForm.phone" auto-complete="off" placeholder="手机号"></el-input>
     </el-form-item>
     <el-form-item prop="checkPass">
       <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
@@ -17,8 +17,7 @@
 <script>
 export default {
   data() {
-
-    var validatePhone = (rule, value, callback) => {
+    /* var validatePhone = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("用户名不能为空"));
       } else {
@@ -38,12 +37,12 @@ export default {
         }
         callback();
       }
-    };
+    }; */
 
     return {
       rules: {
-        phone: [{ validator: validatePhone, trigger: 'blur'}],
-        checkPass: [{  validator: validatePass, trigger: 'blur' }]
+        /* phone: [{ validator: validatePhone, trigger: 'blur'}],
+        checkPass: [{  validator: validatePass, trigger: 'blur' }] */
       },
       loginForm: {
         phone: "",
@@ -59,17 +58,14 @@ export default {
   methods: {
     submitClick: function() {
       var _this = this;
-      this.postRequest("/login", {
+      this.postRequest("/user/login", {
         phone: this.loginForm.phone,
         password: this.loginForm.password
       }).then(resp => {
         if (resp && resp.status == 200) {
-          var data = resp.data;
-          _this.$store.commit("login", data.msg);
-          var path = _this.$route.query.redirect;
-          _this.$router.replace({
-            path: path == "/" || path == undefined ? "/home" : path
-          });
+            _this.$store.commit('login', resp.data);
+            var path = _this.$route.query.redirect;
+            _this.$router.replace({path: path == '/' || path == undefined ? '/home' : path});
         }
       });
     }

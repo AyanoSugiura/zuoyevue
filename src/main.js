@@ -6,8 +6,8 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
-import {getRequest} from './utils/api'
-import {postRequest} from './utils/api'
+import { getRequest } from './utils/api'
+import { postRequest } from './utils/api'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -15,7 +15,24 @@ Vue.use(ElementUI)
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.postRequest = postRequest;
 
-/* eslint-disable no-new */
+
+router.beforeEach((to, from, next) => {
+  var user = localStorage.getItem('user');
+  if (!user) {  /* 未登录 */
+    if (to.name != 'Login' && to.name != 'Register') {
+      !!user ? next() : next({path: '/login', query: {redirect: '/login'}});
+    } else {
+      next();
+    }
+  } else {
+    if (to.name == 'Login' && to.name == 'Register') {
+      next({path: '/', query: {redirect: '/'}});
+    } else {
+      next();
+    }
+  }
+})
+
 new Vue({
   el: '#app',
   router,

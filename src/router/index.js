@@ -3,25 +3,39 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 import Register from '@/components/Register'
+import Course from '@/components/course/Course'
+import Zuoye from '@/components/zuoye/Zuoye'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/Login',
       name: 'Login',
       component: Login
     },
     {
       path: '/Register',
-      name: '注册',
+      name: 'Register',
       component: Register
     },
     {
-      path: '/Home',
-      name: '主页',
-      component: Home
+      path: '/',
+      name: 'Home',
+      component: Home,
+      children: [
+        {
+          path: '/course',
+          name: 'Course',
+          component: Course
+        },
+        {
+          path: '/zuoye',
+          name: 'Zuoye',
+          component: Zuoye
+        }
+      ]
     }
   ]
 })

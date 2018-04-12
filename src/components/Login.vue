@@ -62,11 +62,16 @@ export default {
         phone: this.loginForm.phone,
         password: this.loginForm.password
       }).then(resp => {
-        if (resp && resp.status == 200) {
+        if (resp && resp.status == 200&&resp.data!="") {
+            console.log(resp);
             _this.$store.commit('login', resp.data);
             var path = _this.$route.query.redirect;
-            _this.$router.replace({path: path == '/' || path == undefined ? '/home' : path});
+            _this.$router.replace({path: path == '/Login' || path == undefined ? '/' : path});
         }
+        else _this.$notify.error({
+          title: '登陆失败',
+          message: '请检查账号密码'
+        });
       });
     }
   }

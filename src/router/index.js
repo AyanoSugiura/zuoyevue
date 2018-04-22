@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 import Register from '@/components/Register'
-import Course from '@/components/course/Course'
+import StuCourse from '@/components/course/StuCourse'
+import TchCourse from '@/components/course/TchCourse'
 import Zuoye from '@/components/zuoye/Zuoye'
 
 Vue.use(Router)
@@ -26,9 +27,14 @@ export default new Router({
       component: Home,
       children: [
         {
-          path: '/course',
-          name: 'Course',
-          component: Course
+          path: '/tchcourse',
+          name: 'TchCourse',
+          component: TchCourse
+        },
+        {
+          path: '/stucourse',
+          name: 'StuCourse',
+          component: StuCourse
         },
         {
           path: '/zuoye',

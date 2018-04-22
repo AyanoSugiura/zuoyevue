@@ -94,7 +94,7 @@
                 title: '注册成功',
                 message: '不过教师用户需要联系管理员并且通过审核后才能登陆',
                 type: 'success',
-                duration: 9000
+                duration: 2000
               });
             }
             else {

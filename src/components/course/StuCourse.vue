@@ -1,6 +1,6 @@
 <template>
-    <el-container>
-        <el-form :inline="true" :model="course" status-icon>
+    <el-container style="text-align: left; margin: 10px">
+        <el-form :inline="true" :model="course" status-icon style="text-align: left; margin: 10px">
             <el-form-item label="查询教师课程" prop="phone">
                 <el-input v-model="course.phone" placeholder="请输入教师电话"></el-input>
             </el-form-item>
@@ -72,8 +72,8 @@
                             console.log(resp.data);
                             _this.tchCourses = resp.data;
                         }
-                        else _this.$notify.error({
-                            title: '电话号码错误',
+                        else _this.$notify({
+                            title: '查找不到课程信息',
                             message: '请重新输入'
                         });
                     }
@@ -86,9 +86,10 @@
 
             xuanke(index) {
                 var _this = this;
+                console.log(index);
                 this.postRequest("/xk/apply", {
-                    sid: this.course.phone,
-                    cid:this.tchCourses[0].teacher
+                    sid: this.$store.state.user.id,
+                    cid: this.tchCourses[index].id
                 }).then(resp => {
                     if (resp && resp.status == 200) {
                         if (resp.data == "你已经选了该门课") {
@@ -97,9 +98,8 @@
                                 message: '你已经选了该门课'
                             });
                         }
-
                         else if (resp.data == "申请成功待审核") {
-                            _this.$notify.error({
+                            _this.$notify({
                                 title: '申请选课成功',
                                 message: '申请选课成功等待您的老师审核审核'
                             });

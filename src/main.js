@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import stum from '@/components/menu/stum'
+import tchm from '@/components/menu/tchm'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -11,6 +13,8 @@ import { postRequest } from './utils/api'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.component("stum",stum )
+Vue.component("tchm",tchm )
 
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.postRequest = postRequest;

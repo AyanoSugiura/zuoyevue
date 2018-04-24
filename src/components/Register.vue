@@ -2,10 +2,12 @@
   <el-form :model="registerForm" status-icon :rules="rules" ref="registerForm" class="login-container" label-position="left"
     label-width="0px">
     <h3 class="login_title">系统注册</h3>
-    <el-select v-model="value">
+    <el-form-item>
+    <el-select v-model="value" style="width: 100%">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
       </el-option>
     </el-select>
+    </el-form-item>
     <el-form-item>
       <el-input type="text" v-model="registerForm.name" auto-complete="off" placeholder="姓名"></el-input>
     </el-form-item>

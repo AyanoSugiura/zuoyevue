@@ -19,23 +19,18 @@
         </el-dropdown>
       </div>
     </el-header>
-
     <el-container>
-      <el-container>
-        <el-aside width="180px" class="home-aside">
-          <div style="display: flex;justify-content: flex-start;width: 180px;text-align: left;">
-            <el-menu style="background: #ececec;width: 180px;" unique-opened router>
-              <el-menu-item v-bind:index="courseIs">课程</el-menu-item>
-              <el-menu-item index="/zuoye">作业 </el-menu-item>
-            </el-menu>
-          </div>
-        </el-aside>
-      </el-container>
-      <el-container>
-        <el-main>
-          <router-view></router-view>
-        </el-main>
-      </el-container>
+      <el-aside width="180px" class="home-aside">
+        <div v-if="ulevel==0" style="display: flex;justify-content: flex-start;width: 180px;text-align: left;">
+          <stum/>
+        </div>
+        <div v-else-if="ulevel==1" style="display: flex;justify-content: flex-start;width: 180px;text-align: left;">
+          <tchm/>
+        </div>
+      </el-aside>
+      <el-main class="home-main">
+        <router-view></router-view>
+      </el-main>
     </el-container>
 
   </el-container>
@@ -44,14 +39,19 @@
   export default {
     data() {
       return {
-        ulevel:this.$store.state.user.userlevel,
+        ulevel: this.$store.state.user.userlevel,
         isDot: false
       }
     },
     computed: {
       courseIs: function () {
-        if(this.ulevel==0){ return "/stucourse";}
-        else if(this.ulevel==1){ return "/tchcourse";}
+        if (this.ulevel == 0) { return "/stucourse"; }
+        else if (this.ulevel == 1) { return "/tchcourse"; }
+        else return null;
+      },
+      zuoyeIs: function () {
+        if (this.ulevel == 0) { return "/stuzuoye"; }
+        else if (this.ulevel == 1) { return "/tchzuoye"; }
         else return null;
       }
     },
@@ -100,13 +100,18 @@
 
   .home-aside {
     background-color: #ECECEC;
+    overflow: auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -ms-flex-negative: 0;
+    flex-shrink: 0
   }
 
   .home-main {
     background-color: #fff;
     color: #000;
-    text-align: center;
-    margin: 0px;
+    text-align: left;
+    margin: 20px;
     padding: 0px;
     ;
   }

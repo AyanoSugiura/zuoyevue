@@ -5,7 +5,9 @@ import Home from '@/components/Home'
 import Register from '@/components/Register'
 import StuCourse from '@/components/course/StuCourse'
 import TchCourse from '@/components/course/TchCourse'
-import Zuoye from '@/components/zuoye/Zuoye'
+import StuZuoye from '@/components/zuoye/stu/StuZuoye'
+import TchCreateZY from '@/components/zuoye/tch/CreateZY'
+import TchNewZY from '@/components/zuoye/tch/NewZY'
 
 Vue.use(Router)
 
@@ -27,20 +29,30 @@ export default new Router({
       component: Home,
       children: [
         {
-          path: '/tchcourse',
-          name: 'TchCourse',
-          component: TchCourse
-        },
-        {
           path: '/stucourse',
           name: 'StuCourse',
           component: StuCourse
         },
         {
-          path: '/zuoye',
-          name: 'Zuoye',
-          component: Zuoye
-        }
+          path: '/tchcourse',
+          name: 'TchCourse',
+          component: TchCourse
+        },
+        {
+          path: '/stuzuoye',
+          name: 'StuZuoye',
+          component: StuZuoye
+        },
+        {
+          path: '/tchcreatezy',
+          name: 'TchCreateZY',
+          component: TchCreateZY
+        },
+        {
+          path: '/tchnewzy',
+          name: 'TchNewZY',
+          component: TchNewZY
+        },
       ]
     }
   ]

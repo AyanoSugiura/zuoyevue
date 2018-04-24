@@ -102,8 +102,8 @@
               duration: 2000
             });
 
-            _this.postRequest("/course/findcbyu", {
-              tid: _this.$store.state.user.id
+            _this.postRequest("/course/tchcoursesbp", {
+              phone: this.$store.state.user.phone,
             }).then(resp => {
               if (resp && resp.status == 200) {
                 console.log(resp.data);

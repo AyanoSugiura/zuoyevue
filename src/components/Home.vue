@@ -88,8 +88,8 @@
   }
 
   .home-header {
-    background-color: #20a0ff;
-    color: #333;
+    background-color: #474747;
+    color: #FFF;
     text-align: center;
     display: flex;
     align-items: center;
@@ -108,10 +108,10 @@
   }
 
   .home-main {
-    background-color: #fff;
+    background-color: #ECECEC;
     color: #000;
     text-align: left;
-    margin: 20px;
+    margin: 0px;
     padding: 0px;
     ;
   }

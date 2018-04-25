@@ -1,5 +1,5 @@
 <template>
-  <el-menu style="background: #ececec;width: 180px;" unique-opened router>
+  <el-menu style="width: 180px;background-color: #ECECEC;" unique-opened router>
     <el-menu-item class="el-submenu"  index="/tchcourse">课程</el-menu-item>
     <el-submenu class="el-menu-item"  index="1">
       <template slot="title">作业</template>
@@ -18,6 +18,6 @@
   .el-submenu .el-menu-item {
     width: 180px;
     min-width: 175px;
-  
+    background-color: #ECECEC;
   }
 </style>

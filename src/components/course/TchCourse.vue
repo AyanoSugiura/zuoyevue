@@ -1,20 +1,4 @@
 <template>
-  <!-- <el-container>
-    <el-form :inline="true" :model="course" status-icon :rules="rules">
-      <div v-if="this.$store.state.user.userlevel==1">
-        <el-form-item label="创建课程" prop="name">
-          <el-input v-model="course.name" placeholder="请输入课程名称"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click.native.prevent="submitClick" v-bind:disabled="isKong">创建课程</el-button>
-        </el-form-item>
-      </div>
-      <el-table :data="courses" style="width: 100%">
-        <el-table-column prop="name" label="课程名称" width="180"> </el-table-column>
-      </el-table>
-    </el-form>
-  </el-container> -->
-
   <el-container>
     <el-header style=" display: flex;height: 38px;">
       <el-button class="ktcon1l fl" type="text" @click="dialogFormVisible = true">
@@ -39,8 +23,8 @@
        style="width: 200px; height: 200px; margin: 10px; float:left" :body-style="{ padding: '0px' }">
         <span style="font-family:'Microsoft YaHei';font-size:18px;color: white">
           <div style="position: relative; width: 170px; height: 89px;">
-            <img src="http://assets.ketangpai.com/theme/min/18.jpg" style="width:200px;height:100px">
-            <span style="position: absolute;top:15px;left: 15px; ">{{course.name}}</span>
+            <img :src="'http://assets.ketangpai.com/theme/min/'+  (course.id<10?( '0' +course.id):course.id) +'.jpg'" style="width:200px;height:100px">
+            <span style="position: absolute;top:15px;left: 15px; "><router-link style="color:white;text-decoration:none" :to="{ name: 'CourseDetails', query: { courseId: course.id }}">{{course.name}}</router-link></span>
           </div>
         </span>
 
@@ -152,7 +136,8 @@
           });
 
         });
-        return false;
+        this.course.name="";
+        this.dialogFormVisible=false;
       }
     }
 

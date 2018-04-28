@@ -41,7 +41,6 @@
                 tchCourses: []
             }
         },
-
         created: function () {
             var _this = this;
             console.log(this.$store.state.user.id);
@@ -53,9 +52,7 @@
                     _this.stuCourses = resp.data;
                 }
             });
-
         },
-
         computed: {
             isKong: function () {
                 return this.course.phone === "";
@@ -83,7 +80,6 @@
                     });
                 });
             },
-
             xuanke(index) {
                 var _this = this;
                 console.log(index);
@@ -113,14 +109,11 @@
                                 }
                             });
                         }
-
                         else _this.$notify.error({
                             title: '申请选课失败',
                             message: '请联系管理员'
                         });
                     }
-
-
                     else _this.$notify.error({
                         title: '申请选课失败',
                         message: '请联系管理员'
@@ -128,6 +121,5 @@
                 });
             }
         }
-
     }
 </script>

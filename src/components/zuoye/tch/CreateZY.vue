@@ -10,12 +10,10 @@
     <el-upload 
         class='ensure ensureButt' 
         :action="importFileUrl" 
-        :data="upLoadData" 
-        name="importfile" 
-        :auto-upload="false"
+      
         :onError="uploadError"
         :onSuccess="uploadSuccess" 
-        :on-change="coutfl"
+        :on-change="onChanges"
         :beforeUpload="beforeAvatarUpload">
         <el-button size="small" type="primary">点击上传</el-button>
     </el-upload>
@@ -26,7 +24,7 @@
   export default {
     data() {
       return {
-        importFileUrl: 'http://127.0.0.1:8089/',
+        importFileUrl: 'http://localhost:8089/files/save',
         upLoadData: {
           tiltle: '',
           content: '',
@@ -43,16 +41,16 @@
       } */
     },
     methods: {
-      coutfl : function (file,fileList) {
-        console.log(file);
-        console.log(fileList);
+      onChanges : function (file,fileList) {
+        //console.log(file);
+        
 
       },
       uploadError: function () {
         ;
       },
-      uploadSuccess: function () {
-        ;
+      uploadSuccess: function (response, file, fileList) {
+        console.log(fileList);
       },
       beforeAvatarUpload: function () {
         ;

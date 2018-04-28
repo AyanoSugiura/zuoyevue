@@ -15,6 +15,7 @@ export default new Vuex.Store({
       usable: window.localStorage.getItem('user' || '[]') == null ? -1 : JSON.parse(window.localStorage.getItem('user' || '[]')).usable
 
     },
+    courseId:null,
     routes: [],
     msgList: [],
     isDotMap: new Map(),
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     logout(state){
       window.localStorage.removeItem('user');
       state.routes = [];
+    },
+    setCourseId(state,courseId){
+      state.courseId=courseId;
     }
   
   },

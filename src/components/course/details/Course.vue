@@ -5,14 +5,15 @@
         padding: 0px;"> -->
     <div>
         <el-menu mode="horizontal" unique-opened router style="text-align: center; display: flex;  align-items: center;">
-            <el-menu-item index="/coursedetails/zuoye?courseId=1">作业</el-menu-item>
+            <el-menu-item index="/coursedetails/zuoye">作业</el-menu-item>
             <el-menu-item index="2">成员</el-menu-item>
             <el-menu-item index="3">消息中心</el-menu-item>
         </el-menu>
-        <el-main >
+        <el-main>
             <router-view></router-view>
-        </el-main> 
+        </el-main>
     </div>
+
     <!-- </el-header> -->
 
     <!-- </el-container> -->
@@ -20,8 +21,15 @@
 
 <script>
     export default {
-        data(){
-            
+        data() {
+            return {
+
+            }
+        },
+        created: function () {
+            if (this.$route.query.courseId != null || (typeof (this.$route.query.courseId) === 'undefined') == false) {
+                this.$store.commit('setCourseId', this.$route.query.courseId);
+            }
         }
     }
 </script>

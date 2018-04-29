@@ -65,6 +65,7 @@ export default {
         if (resp && resp.status == 200&&resp.data!="") {
             console.log(resp);
             _this.$store.commit('login', resp.data);
+            _this.$store.commit('setCourseId',null);
             var path = _this.$route.query.redirect;
             _this.$router.replace({path: path == '/Login' || path == undefined ? '/' : path});
         }

@@ -7,7 +7,7 @@
         <el-menu mode="horizontal" unique-opened router style="text-align: center; display: flex;  align-items: center;">
             <el-menu-item index="/coursedetails/zuoye">作业</el-menu-item>
             <el-menu-item index="2">成员</el-menu-item>
-            <el-menu-item index="3">消息中心</el-menu-item>
+            <el-menu-item index="3">其他</el-menu-item>
         </el-menu>
         <el-main>
             <router-view></router-view>

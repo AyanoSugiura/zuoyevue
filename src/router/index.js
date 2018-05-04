@@ -7,6 +7,10 @@ import StuCourse from '@/components/course/StuCourse'
 import TchCourse from '@/components/course/TchCourse'
 import CourseDetails from '@/components/course/details/Course'
 import CourseDetailsZuoye from '@/components/course/details/Zuoye'
+
+import TZyDetails from '@/components/zuoye/tch/TZyDetails'
+import SZyDetails from '@/components/zuoye/stu/SZyDetails'
+
 import StuZuoye from '@/components/zuoye/stu/StuZuoye'
 import TchCreateZY from '@/components/zuoye/tch/CreateZY'
 import TchNewZY from '@/components/zuoye/tch/NewZY'
@@ -52,6 +56,17 @@ export default new Router({
           name: 'TchCourse',
           component: TchCourse
         },
+        {
+          path: '/tzydetails',
+          name: 'TZyDetails',
+          component: TZyDetails
+        },
+        {
+          path: '/szydetails',
+          name: 'SZyDetails',
+          component: SZyDetails
+        },
+
         {
           path: '/stuzuoye',
           name: 'StuZuoye',

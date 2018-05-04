@@ -5,7 +5,7 @@
         <i class="el-icon-plus">创建课程</i>
       </el-button>
     </el-header>
-    <el-dialog title="新建班级" :visible.sync="dialogFormVisible" style="width: 835px">
+    <el-dialog title="加入课程" :visible.sync="dialogFormVisible" style="width: 835px">
       <el-form :inline="true" :model="course" status-icon :rules="rules">
         <el-form-item label="班级名称" prop="name">
           <el-input v-model="course.name" placeholder="请输入课程名称"></el-input>
@@ -15,6 +15,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
     <el-main>
       
       <el-card 
@@ -38,6 +39,7 @@
       </el-card>
       
     </el-main>
+
   </el-container>
 
 

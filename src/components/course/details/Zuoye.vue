@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-collapse style="margin-right: 50px;" @change="collapseChange">
+    <el-collapse v-if="this.$store.state.user.userlevel==1" style="margin-right: 50px;" @change="collapseChange">
       <el-collapse-item title="十发布作业" name="1">
         <el-form ref="upLoadData" :model="upLoadData" label-width="80px">
           <el-form-item label="标题" style="margin-right: 20px;">
@@ -25,32 +25,36 @@
         <el-row>
           <el-col :span="15">
             <span>
-              <h3 class="work-title">{{zuoye.title}}</h3>
+              <router-link v-if="$store.state.user.userlevel==1"  style="text-decoration:none" :to="{ name: 'TZyDetails', query: { taskId: zuoye.id }}">
+                <h3 class="work-title">{{zuoye.title}}</h3>
+              </router-link>
+              <router-link v-else-if="$store.state.user.userlevel==0" style="text-decoration:none" :to="{ name: 'SZyDetails', query: { taskId: zuoye.id }}">
+                <h3 class="work-title">{{zuoye.title}}</h3>
+              </router-link>
             </span>
           </el-col>
-
           <el-col :span="9">
-
+            <el-button v-if="$store.state.user.userlevel==0" style="margin-right: 30px;float: right;" size="small" :type="btType(zuoye.stuStatus)"  @click="switchs(zuoye.stuStatus,zuoye.id)" >{{ zuoye.stuStatus }}</el-button>
           </el-col>
         </el-row>
       </div>
 
-      
+
 
       <div class="word">
         <div class="p">{{zuoye.content}}</div>
       </div>
       <br/>
-     <!-- <el-row>
+      <!-- <el-row>
         <el-col :span="3" v-for="zy in (zuoye.files_links.split('|'))"  :key="zy.length" >
            <a> {{zy}} </a>
         </el-col>
       </el-row> -->
 
       <el-row>
-        <el-col  v-for="zy in (zuoye.files_links.split('|'))"  :key="zy.length" >
+        <el-col v-for="zy in (zuoye.files_links.split('|'))" :key="zy.length">
           <!-- {{zy.substring(zy.lastIndexOf("."))}} -->
-           <!-- <div align="left" v-if="(zy.substring(zy.lastIndexOf('|')))=='.doc' ">
+          <!-- <div align="left" v-if="(zy.substring(zy.lastIndexOf('|')))=='.doc' ">
               <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png">
            </div>
            <div align="left" v-else-if="(zy.substring(zy.lastIndexOf('|')))=='.docx' ">
@@ -62,84 +66,13 @@
            <div align="left" v-else>
               <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png">
            </div> -->
-           <div style="margin-bottom:5px"> <a  :href="zy">{{zy.substring(zy.lastIndexOf("/")+1)}} </a> </div>
+          <div style="margin-bottom:5px">
+            <a :href="zy">{{zy.substring(zy.lastIndexOf("/")+1)}} </a>
+          </div>
         </el-col>
       </el-row>
 
-      <!-- <div align="left">
-        <ul class="clearfix">
 
-          <li data-id="MDAwMDAwMDAwMLSsrd6HucmwhctyoQ" data-size="6.47KB">
-            <a href="javascript:;" data-name="新建 Microsoft Excel 工作表.xlsx" data-url="/PluginApp/to/id/MDAwMDAwMDAwMLSsrd6HucmwhctyoQ/expires/4647055914/sign/c35c69f1bf08e9f45192c9356b409273513c6b7a.html"
-              data-popurl="" data-down="/File/download/id/MDAwMDAwMDAwMLSsrd6HucmwhctyoQ/expires/4647055914/sign/c35c69f1bf08e9f45192c9356b409273513c6b7a.html"
-              data-ispic="" data-isvideo="" data-isonline="" data-issb="" class="fileext preview">
-              <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png" data-src="">
-            </a>
-            <h4>
-              <a href="javascript:;" data-name="新建 Microsoft Excel 工作表.xlsx" data-url="/PluginApp/to/id/MDAwMDAwMDAwMLSsrd6HucmwhctyoQ/expires/4647055914/sign/c35c69f1bf08e9f45192c9356b409273513c6b7a.html"
-                data-popurl="" data-src="" data-ispic="" data-isvideo="" data-isonline="" data-issb="" class="fileext preview"
-                title="新建 Microsoft Excel 工作表.xlsx">
-                新建 Microsoft Excel 工作表.xlsx
-              </a>
-            </h4>
-            <a href="/File/download/id/MDAwMDAwMDAwMLSsrd6HucmwhctyoQ/expires/4647055914/sign/c35c69f1bf08e9f45192c9356b409273513c6b7a.html"
-              class="download">下载</a>
-          </li>
-
-          <li data-id="MDAwMDAwMDAwMLSsrd6HucmxhMtyoQ" data-size="292KB">
-            <a href="javascript:;" data-name="3 2017届毕业设计（论文）开题报告.doc" data-url="/PluginApp/to/id/MDAwMDAwMDAwMLSsrd6HucmxhMtyoQ/expires/4647055914/sign/9684c38d787c552efd1d152c4139e7c1fb6e955e.html"
-              data-popurl="" data-down="/File/download/id/MDAwMDAwMDAwMLSsrd6HucmxhMtyoQ/expires/4647055914/sign/9684c38d787c552efd1d152c4139e7c1fb6e955e.html"
-              data-ispic="" data-isvideo="" data-isonline="" data-issb="" class="fileext preview">
-              <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png" data-src="">
-            </a>
-            <h4>
-              <a href="javascript:;" data-name="3 2017届毕业设计（论文）开题报告.doc" data-url="/PluginApp/to/id/MDAwMDAwMDAwMLSsrd6HucmxhMtyoQ/expires/4647055914/sign/9684c38d787c552efd1d152c4139e7c1fb6e955e.html"
-                data-popurl="" data-src="" data-ispic="" data-isvideo="" data-isonline="" data-issb="" class="fileext preview"
-                title="3 2017届毕业设计（论文）开题报告.doc">
-                3 2017届毕业设计（论文）开题报告.doc
-              </a>
-            </h4>
-            <a href="/File/download/id/MDAwMDAwMDAwMLSsrd6HucmxhMtyoQ/expires/4647055914/sign/9684c38d787c552efd1d152c4139e7c1fb6e955e.html"
-              class="download">下载</a>
-          </li>
-
-          <li data-id="MDAwMDAwMDAwMLSsrd6HucmxhbVyoQ" data-size="134B">
-            <a href="javascript:;" data-name="新建文本文档.txt" data-url="/PluginApp/to/id/MDAwMDAwMDAwMLSsrd6HucmxhbVyoQ/expires/4647055914/sign/96c75b4f588a0f59e1301dad0596800eac1e9d05.html"
-              data-popurl="" data-down="/File/download/id/MDAwMDAwMDAwMLSsrd6HucmxhbVyoQ/expires/4647055914/sign/96c75b4f588a0f59e1301dad0596800eac1e9d05.html"
-              data-ispic="" data-isvideo="" data-isonline="" data-issb="" class="fileext preview">
-              <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_txt.png" data-src="">
-            </a>
-            <h4>
-              <a href="javascript:;" data-name="新建文本文档.txt" data-url="/PluginApp/to/id/MDAwMDAwMDAwMLSsrd6HucmxhbVyoQ/expires/4647055914/sign/96c75b4f588a0f59e1301dad0596800eac1e9d05.html"
-                data-popurl="" data-src="" data-ispic="" data-isvideo="" data-isonline="" data-issb="" class="fileext preview"
-                title="新建文本文档.txt">
-                新建文本文档.txt
-              </a>
-            </h4>
-            <a href="/File/download/id/MDAwMDAwMDAwMLSsrd6HucmxhbVyoQ/expires/4647055914/sign/96c75b4f588a0f59e1301dad0596800eac1e9d05.html"
-              class="download">下载</a>
-          </li>
-
-          <li data-id="MDAwMDAwMDAwMLSsrd6HucmxhdtyoQ" data-size="23.49KB">
-            <a href="javascript:;" data-name="g2-ypTky_400x400.jpg" data-url="/PluginApp/to/id/MDAwMDAwMDAwMLSsrd6HucmxhdtyoQ/expires/4647055914/sign/c1a2c3a29573c7622bc9d19208864149c1092c97.html"
-              data-popurl="" data-down="/File/download/id/MDAwMDAwMDAwMLSsrd6HucmxhdtyoQ/expires/4647055914/sign/c1a2c3a29573c7622bc9d19208864149c1092c97.html"
-              data-ispic="1" data-isvideo="" data-isonline="" data-issb="" class="fileext preview">
-              <img src="//img.ketangpai.com/ketangpai.aliapp.com/1/webroot/Uploads/Download/2018-04-29/5ae579fdcd514.jpg%40%2164-64?OSSAccessKeyId=LTAItfPkNIKJFibY&amp;Expires=1525596714&amp;Signature=t2oQ52T1e9yOwgtiBuux1SH4QS4%3D"
-                data-src="//img.ketangpai.com/ketangpai.aliapp.com/1/webroot/Uploads/Download/2018-04-29/5ae579fdcd514.jpg?OSSAccessKeyId=LTAItfPkNIKJFibY&amp;Expires=1628671914&amp;Signature=g0FPjJFAKCYE9qDAj7aMKG7ZTEY%3D">
-            </a>
-            <h4>
-              <a href="javascript:;" data-name="g2-ypTky_400x400.jpg" data-url="/PluginApp/to/id/MDAwMDAwMDAwMLSsrd6HucmxhdtyoQ/expires/4647055914/sign/c1a2c3a29573c7622bc9d19208864149c1092c97.html"
-                data-popurl="" data-src="//img.ketangpai.com/ketangpai.aliapp.com/1/webroot/Uploads/Download/2018-04-29/5ae579fdcd514.jpg?OSSAccessKeyId=LTAItfPkNIKJFibY&amp;Expires=1628671914&amp;Signature=g0FPjJFAKCYE9qDAj7aMKG7ZTEY%3D"
-                data-ispic="1" data-isvideo="" data-isonline="" data-issb="" class="fileext preview" title="g2-ypTky_400x400.jpg">
-                g2-ypTky_400x400.jpg
-              </a>
-            </h4>
-            <a href="/File/download/id/MDAwMDAwMDAwMLSsrd6HucmxhdtyoQ/expires/4647055914/sign/c1a2c3a29573c7622bc9d19208864149c1092c97.html"
-              class="download">下载</a>
-          </li>
-
-        </ul>
-      </div> -->
 
     </el-card>
   </div>
@@ -170,7 +103,22 @@
       }).then(resp => {
         if (resp && resp.status == 200) {
           _this.zuoyes = resp.data;
-          console.log( resp.data);
+          //console.log(resp.data);
+          if (this.$store.state.user.userlevel == 0) {
+
+            for (let zuoye in _this.zuoyes) {
+              _this.postRequest("/task/stutasks", {
+                tasskId: _this.zuoyes[zuoye].id,
+                uid: _this.$store.state.user.id
+              }).then(resp => {
+                if (resp && resp.status == 200) {
+                  _this.$set(_this.zuoyes[zuoye],'stuStatus',resp.data);
+
+                }
+              });
+            }
+          }
+          console.log(_this.zuoyes);
         }
       });
     },
@@ -218,6 +166,18 @@
             });
         });
       },
+
+      btType: function (type) {
+        if(type=="未提交") return "warning";
+        else if(type=="已批改") return "success";
+        else if(type=="未批改") return "info";
+      },
+      switchs : function(type,zy){
+        if(type=="未提交") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id,stuStatus:1 }});
+        else if(type=="未批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id,stuStatus:2 }});
+        else if(type=="已批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id,stuStatus:3 }});
+      },
+
 
       onChanges: function (file, fileList) {
         //console.log(file);

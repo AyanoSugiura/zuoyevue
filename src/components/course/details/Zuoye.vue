@@ -25,16 +25,17 @@
         <el-row>
           <el-col :span="15">
             <span>
-              <router-link v-if="$store.state.user.userlevel==1"  style="text-decoration:none" :to="{ name: 'TZyDetails', query: { taskId: zuoye.id }}">
+              <router-link v-if="$store.state.user.userlevel==1" style="text-decoration:none" :to="{ name: 'TZyDetails', query: { taskId: zuoye.id }}">
                 <h3 class="work-title">{{zuoye.title}}</h3>
               </router-link>
-              <router-link v-else-if="$store.state.user.userlevel==0" style="text-decoration:none" :to="{ name: 'SZyDetails', query: { taskId: zuoye.id }}">
+              <router-link v-else-if="$store.state.user.userlevel==0" style="text-decoration:none" :to="{ name: 'SZyDetails', query: { taskId: zuoye }}">
                 <h3 class="work-title">{{zuoye.title}}</h3>
               </router-link>
             </span>
           </el-col>
           <el-col :span="9">
-            <el-button v-if="$store.state.user.userlevel==0" style="margin-right: 30px;float: right;" size="small" :type="btType(zuoye.stuStatus)"  @click="switchs(zuoye.stuStatus,zuoye.id)" >{{ zuoye.stuStatus }}</el-button>
+            <el-button v-if="$store.state.user.userlevel==0" style="margin-right: 30px;float: right;" size="small" :type="btType(zuoye.stuStatus)"
+              @click="switchs(zuoye.stuStatus,zuoye)">{{ zuoye.stuStatus }}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -112,7 +113,7 @@
                 uid: _this.$store.state.user.id
               }).then(resp => {
                 if (resp && resp.status == 200) {
-                  _this.$set(_this.zuoyes[zuoye],'stuStatus',resp.data);
+                  _this.$set(_this.zuoyes[zuoye], 'stuStatus', resp.data);
 
                 }
               });
@@ -168,14 +169,16 @@
       },
 
       btType: function (type) {
-        if(type=="未提交") return "warning";
-        else if(type=="已批改") return "success";
-        else if(type=="未批改") return "info";
+        if (type == "未提交") return "warning";
+        else if (type == "已批改") return "success";
+        else if (type == "未批改") return "info";
       },
-      switchs : function(type,zy){
-        if(type=="未提交") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id,stuStatus:1 }});
-        else if(type=="未批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id,stuStatus:2 }});
-        else if(type=="已批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id,stuStatus:3 }});
+      switchs: function (type, zy) {
+        console.log(zy.title);
+        this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: type } });
+        // if (type == "未提交") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 1 } });
+        // else if (type == "未批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 2 } });
+        // else if (type == "已批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 3 } });
       },
 
 

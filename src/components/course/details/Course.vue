@@ -4,7 +4,7 @@
         box-sizing: content-box;
         padding: 0px;"> -->
     <div>
-        <el-menu mode="horizontal" unique-opened router style="text-align: center; display: flex;  align-items: center;">
+        <el-menu mode="horizontal" unique-opened router default-active="/coursedetails/zuoye" style="text-align: center; display: flex;  align-items: center;">
             <el-menu-item index="/coursedetails/zuoye">作业</el-menu-item>
             <el-menu-item index="2">成员</el-menu-item>
             <el-menu-item index="3">其他</el-menu-item>
@@ -30,6 +30,7 @@
             if (this.$route.query.courseId != null || (typeof (this.$route.query.courseId) === 'undefined') == false) {
                 this.$store.commit('setCourseId', this.$route.query.courseId);
             }
+            this.$router.replace({path:'/coursedetails/zuoye'});
         }
     }
 </script>

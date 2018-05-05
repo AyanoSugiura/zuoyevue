@@ -17,15 +17,14 @@
     </el-dialog>
 
     <el-main>
-      
-      <el-card 
-       v-for="course in courses" 
-       :key="course.id"
-       style="width: 200px; height: 200px; margin: 10px; float:left" :body-style="{ padding: '0px' }">
+
+      <el-card v-for="course in courses" :key="course.id" style="width: 200px; height: 200px; margin: 10px; float:left" :body-style="{ padding: '0px' }">
         <span style="font-family:'Microsoft YaHei';font-size:18px;color: white">
           <div style="position: relative; width: 170px; height: 89px;">
             <img :src="'http://assets.ketangpai.com/theme/min/'+  (course.id<10?( '0' +course.id):course.id) +'.jpg'" style="width:200px;height:100px">
-            <span style="position: absolute;top:15px;left: 15px; "><router-link style="color:white;text-decoration:none" :to="{ name: 'CourseDetails', query: { courseId: course.id }}">{{course.name}}</router-link></span>
+            <span style="position: absolute;top:15px;left: 15px; ">
+              <router-link style="color:white;text-decoration:none" :to="{ name: 'CourseDetails', query: { courseId: course.id }}">{{course.name}}</router-link>
+            </span>
           </div>
         </span>
 
@@ -37,7 +36,7 @@
           </div>
         </div>
       </el-card>
-      
+
     </el-main>
 
   </el-container>
@@ -138,8 +137,8 @@
           });
 
         });
-        this.course.name="";
-        this.dialogFormVisible=false;
+        this.course.name = "";
+        this.dialogFormVisible = false;
       }
     }
 

@@ -43,6 +43,13 @@
         isDot: false
       }
     },
+    created: function () {
+      var pathSs;
+      if (this.$store.state.user.userlevel == 0) pathSs = "/stucourse";
+      else if (this.$store.state.user.userlevel == 1) pathSs = "/tchcourse";
+      console.log();
+      if(this.$route.name=="Home") this.$router.replace({ path: pathSs });
+    },
     computed: {
       courseIs: function () {
         if (this.ulevel == 0) { return "/stucourse"; }

@@ -67,7 +67,11 @@ export default {
             _this.$store.commit('login', resp.data);
             _this.$store.commit('setCourseId',null);
             var path = _this.$route.query.redirect;
-            _this.$router.replace({path: path == '/Login' || path == undefined ? '/' : path});
+            var pathS;
+            if(_this.$store.state.user.userlevel==0)pathS="/stucourse";
+            else if(_this.$store.state.user.userlevel==1)pathS="/tchcourse";
+            
+            _this.$router.replace({path: path == '/Login' || path == undefined ? pathS : path});
         }
         else _this.$notify.error({
           title: '登陆失败',

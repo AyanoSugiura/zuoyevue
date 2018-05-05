@@ -223,6 +223,7 @@
 
   .clearfix {
     zoom: 1;
+    
   }
 
   .download {

@@ -5,8 +5,10 @@ import Home from '@/components/Home'
 import Register from '@/components/Register'
 import StuCourse from '@/components/course/StuCourse'
 import TchCourse from '@/components/course/TchCourse'
+
 import CourseDetails from '@/components/course/details/Course'
 import CourseDetailsZuoye from '@/components/course/details/Zuoye'
+import CourseDetailsMember from '@/components/course/details/Member'
 
 import TZyDetails from '@/components/zuoye/tch/TZyDetails'
 import SZyDetails from '@/components/zuoye/stu/SZyDetails'
@@ -43,6 +45,11 @@ export default new Router({
               path: '/coursedetails/zuoye',
               name: 'CourseDetailsZuoye',
               component: CourseDetailsZuoye
+            },
+            {
+              path: '/coursedetails/member',
+              name: 'CourseDetailsMember',
+              component: CourseDetailsMember
             },
           ]
         },

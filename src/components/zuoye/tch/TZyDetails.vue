@@ -37,11 +37,15 @@
                     </el-form>
 
                     <el-button style="margin-right: 55px;margin-bottom : 35px;float: right;" type="success" plain @click="submitPg(stuZuoye)"
-                        v-bind:disabled="isKong">{{(stuZuoye==null) ? '提交':'更新提交'}}</el-button>
-                    <el-select v-model="value" placeholder="请打分" style="margin-right: 55px;margin-bottom : 35px;float: right;">
+                        v-bind:disabled="isKong">{{(stuZuoye.isPg==0) ? '提交':'更改批改'}}</el-button>
+                    <el-select v-model="stuZuoye.score" placeholder="请打分" style="margin-right: 55px;margin-bottom : 35px;float: right;">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label">
                         </el-option>
                     </el-select>
+                    <!-- <el-select v-if="selectForm.type=='未批'" v-model="value" placeholder="请打分" style="margin-right: 55px;margin-bottom : 35px;float: right;">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label">
+                        </el-option>
+                    </el-select> -->
 
                 </el-collapse-item>
             </el-collapse>
@@ -92,7 +96,7 @@
                         label: "0"
                     },
                 ],
-                value: '',
+                //value: '',
                 selectForm: {
                     type: "未批"
                 },
@@ -167,15 +171,26 @@
         methods: {
             submitPg: function (stuZuoye) {
                 var _this = this;
+                var _type = 3;
+                if (this.selectForm.type == "已批") _type = 1;
+                else if (this.selectForm.type == "未批") _type = 0;
                 if (stuZuoye.tassk.course.teacher.id == this.$store.state.user.id) {
                     this.postRequest("/szy/tchpg", {
-                        id:stuZuoye.id,
+                        id: stuZuoye.id,
                         comment: stuZuoye.comment,
-                        score:this.value,
-                        isPg: 1
+                        score: stuZuoye.score,
+                        isPg: 1,
+                        type: _type,
+                        taskId: this.$route.query.taskId
                     }).then(resp => {
                         if (resp && resp.status == 200) {
                             _this.stuZuoyes = resp.data;
+                            _this.$notify({ 
+                                title: "成功",
+                                message: _type==1?'作业已更新批改':'批改成功',
+                                type: "success",
+                                duration: 2000
+                            });
                         }
                     });
                 }
@@ -206,7 +221,9 @@
                 console.log(this.stuZuoyes);
             },
 
-
+            stuZyScore: function (szyScr) {
+                return szyScr == null ? '' : szyScr;
+            }
 
         },
     }

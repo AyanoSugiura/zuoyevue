@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <i class="el-icon-document titles ">{{$route.query.taskTitle}}</i>
+            <i class="el-icon-document titles ">{{stuZuoye.tassk.title}}</i>
         </div>
         <el-card style="background-color: white;width: 800px;margin-left: 56px;">
             <el-row>
@@ -77,7 +77,10 @@
                 courses: [],
                 filesList: [],
                 filesList2: [],
-                stuZuoye: null
+                stuZuoye: {
+                    files_links:'',
+                    tassk:{}
+                }
             }
         },
         created: function () {

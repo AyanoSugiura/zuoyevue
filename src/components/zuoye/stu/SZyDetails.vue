@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <i class="el-icon-document titles ">{{stuZuoye.tassk.title}}</i>
+            <i class="el-icon-document titles ">{{stuZuoye.tassk.title==null?(this.$route.query.taskTitle):stuZuoye.tassk.title}}</i>
         </div>
         <el-card style="background-color: white;width: 800px;margin-left: 56px;">
             <el-row>
@@ -9,7 +9,7 @@
                     <el-upload class='ensure ensureButt' :action="importFileUrl" :onError="uploadError" :file-list="filesList" :onSuccess="uploadSuccess"
                         :on-change="onChanges" :before-remove="bRemove" :beforeUpload="beforeAvatarUpload">
                         <el-button slot="trigger" size="small" type="primary">上传文件</el-button>
-                        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-bind:disabled="isKong">{{(stuZuoye==null) ? '提交':'更新提交'}}</el-button>
+                        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-bind:disabled="isKong">{{(stuZuoye.id==null) ? '提交':'更新提交'}}</el-button>
                     </el-upload>
                 </el-col>
 

@@ -9,6 +9,7 @@ import TchCourse from '@/components/course/TchCourse'
 import CourseDetails from '@/components/course/details/Course'
 import CourseDetailsZuoye from '@/components/course/details/Zuoye'
 import CourseDetailsMember from '@/components/course/details/Member'
+import TchStatistic from '@/components/course/details/TchStatistic'
 
 import TZyDetails from '@/components/zuoye/tch/TZyDetails'
 import SZyDetails from '@/components/zuoye/stu/SZyDetails'
@@ -84,6 +85,11 @@ export default new Router({
           path: '/stucj',
           name: 'StuCj',
           component: StuCj
+        },
+        {
+          path: '/tchstatistic',
+          name: 'TchStatistic',
+          component: TchStatistic
         },
 
         {

@@ -40,18 +40,20 @@
 
         <el-main>
 
-            <el-card v-for="course in stuCourses" :key="course.id" style="width: 200px; height: 200px; margin: 10px; float:left" :body-style="{ padding: '0px' }">
+            <el-card v-for="stuCourse in stuCourses" :key="stuCourse.id" style="width: 200px; height: 200px; margin: 10px; float:left" :body-style="{ padding: '0px' }">
                 <span style="font-family:'Microsoft YaHei';font-size:18px;color: white">
                     <div style="position: relative; width: 170px; height: 89px;">
-                        <img :src="'http://assets.ketangpai.com/theme/min/'+  (course.id<10?( '0' +course.id):course.id) +'.jpg'" style="width:200px;height:100px">
+                        <img :src="'http://assets.ketangpai.com/theme/min/'+  (stuCourse.course.id<10?( '0' +stuCourse.course.id): (stuCourse.course.id%31) ) +'.jpg'" style="width:200px;height:100px">
                         <span style="position: absolute;top:15px;left: 15px; ">
-                            <router-link style="color:white;text-decoration:none" :to="{ name: 'CourseDetails', query: { courseId: course.id }}">{{course.name}}</router-link>
+                            <router-link v-if="stuCourse.verify==2" style="color:white;text-decoration:none" :to="{ name: 'CourseDetails', query: { courseId: stuCourse.course.id }}">{{stuCourse.course.name}}</router-link>
+                            <span v-if="stuCourse.verify==1" style="color:white">{{stuCourse.course.name}}</span>
                         </span>
                     </div>
                 </span>
 
-                <div style="padding: 14px;">
-                    <span>课程号:{{course.id}}</span>
+                <div style="padding: 14px; white-space:pre;">
+                    <span>课程号:{{stuCourse.course.id+'  '}}</span>
+                    <span v-if="stuCourse.verify==1" style="color:red;">待审核</span>
                     <div class="bottom clearfix">
                         <time class="time"></time>
                         <el-button type="text" class="button">操作按钮</el-button>

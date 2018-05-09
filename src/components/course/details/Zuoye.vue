@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-collapse v-if="this.$store.state.user.userlevel==1" style="margin-right: 50px;" @change="collapseChange">
+    <el-collapse v-if="this.$store.state.user.userlevel==1" style="margin-left: 50px;;margin-right: 50px;" @change="collapseChange">
       <el-collapse-item title="十发布作业" name="1">
         <el-form ref="upLoadData" :model="upLoadData" label-width="80px">
           <el-form-item label="标题" style="margin-right: 20px;">
@@ -20,7 +20,7 @@
     </el-collapse>
     <br/>
 
-    <el-card v-for="zuoye in zuoyes" :key="zuoye.id" style=" margin-right: 50px; margin-bottom:15px ">
+    <el-card v-for="zuoye in zuoyes" :key="zuoye.id" style="margin-left: 50px; margin-right: 50px; margin-bottom:15px ">
       <div slot="header" class="clearfix">
         <el-row>
           <el-col :span="15">
@@ -36,6 +36,21 @@
           <el-col :span="9">
             <el-button v-if="$store.state.user.userlevel==0" style="margin-right: 30px;float: right;" size="small" :type="btType(zuoye.stuStatus)"
               @click="switchs(zuoye.stuStatus,zuoye)">{{ zuoye.stuStatus }}</el-button>
+
+            <div v-if="$store.state.user.userlevel==1" style="float: left;margin-left: 150px">
+              <div style="float: left;" class="total-cont">
+                <p style=" color: #5b5b5b; font-size: 30px ;margin-top: 5px;margin-bottom: 0px;">{{zuoye.pgStatistics.isPg}}</p>
+                <p style=" color: green; font-size: 15px ;margin-top: 5px;margin-bottom: 3px;">已批</p>
+              </div>
+              <div style="float: left;" class="total-cont">
+                <p style=" color: #5b5b5b; font-size: 30px ;margin-top: 5px;margin-bottom: 0px;">{{zuoye.pgStatistics.noPg}}</p>
+                <p style=" color: grey; font-size: 15px ;margin-top: 5px;margin-bottom: 3px;">未批</p>
+              </div>
+              <div style="float: left;" class="total-cont">
+                <p style=" color: #5b5b5b; font-size: 30px ;margin-top: 5px;margin-bottom: 0px;">{{zuoye.pgStatistics.noSub}}</p>
+                <p style=" color: red; font-size: 15px ;margin-top: 5px;margin-bottom: 3px;">未交</p>
+              </div>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -43,7 +58,7 @@
 
 
       <div class="word">
-        <div class="p">{{zuoye.content}}</div>
+        <div class="pr">{{zuoye.content}}</div>
       </div>
       <br/>
       <!-- <el-row>
@@ -52,26 +67,24 @@
         </el-col>
       </el-row> -->
 
-      <el-row>
-        <el-col v-for="zy in (zuoye.files_links.split('|'))" :key="zy.length">
-          <!-- {{zy.substring(zy.lastIndexOf("."))}} -->
-          <!-- <div align="left" v-if="(zy.substring(zy.lastIndexOf('|')))=='.doc' ">
-              <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png">
-           </div>
-           <div align="left" v-else-if="(zy.substring(zy.lastIndexOf('|')))=='.docx' ">
-              <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png">
-           </div>
-           <div align="left" v-else-if="(zy.substring(zy.lastIndexOf('|')))=='.pdf' ">
-              <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png">
-           </div>
-           <div align="left" v-else>
-              <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png">
-           </div> -->
-          <div style="margin-bottom:5px">
-            <a :href="zy">{{zy.substring(zy.lastIndexOf("/")+1)}} </a>
-          </div>
-        </el-col>
-      </el-row>
+      <div v-for="zy in (zuoye.files_links.split('|'))" :key="zy.length" style="margin-right: 20px;margin-bottom:50px;float: left;">
+
+        <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'||(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
+          <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
+            height="80px" width="80px">
+        </div>
+        <div v-else>
+          <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
+        </div>
+        <div>
+          <a :href="zy" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>5?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,5)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
+          </a>
+        </div>
+
+      </div>
+
+
+      <!-- </el-row> -->
 
 
 
@@ -91,9 +104,10 @@
           files: ""
         },
         courses: [],
+        linshi: [],
         filesList: [],
         filesList2: [],
-        zuoyes: []
+        zuoyes: [],
       };
     },
     created: function () {
@@ -103,25 +117,42 @@
         cid: this.$store.state.courseId
       }).then(resp => {
         if (resp && resp.status == 200) {
-          _this.zuoyes = resp.data;
+          _this.linshi = resp.data;
           //console.log(resp.data);
+
+          for (let zyt in _this.linshi) {
+            this.postRequest("/szy/pgstatistics", {
+              taskId: _this.linshi[zyt].id,
+              courseId: _this.$store.state.courseId
+            }).then(resp => {
+              if (resp && resp.status == 200) {
+                //_this.linshi[zyt].pgStatistics={};
+                _this.$set(_this.linshi[zyt], 'pgStatistics', resp.data);
+                if (zyt == (_this.linshi.length - 1)) _this.zuoyes = _this.linshi;
+              }
+            });
+          }
+          console.log(_this.linshi);
           if (this.$store.state.user.userlevel == 0) {
-
-            for (let zuoye in _this.zuoyes) {
-              _this.postRequest("/task/stutasks", {
-                tasskId: _this.zuoyes[zuoye].id,
-                uid: _this.$store.state.user.id
-              }).then(resp => {
-                if (resp && resp.status == 200) {
-                  _this.$set(_this.zuoyes[zuoye], 'stuStatus', resp.data);
-
-                }
-              });
+            for (let zuoye in _this.linshi) {
+              _this
+                .postRequest("/task/stutasks", {
+                  tasskId: _this.linshi[zuoye].id,
+                  uid: _this.$store.state.user.id
+                })
+                .then(resp => {
+                  if (resp && resp.status == 200) {
+                    _this.$set(_this.linshi[zuoye], "stuStatus", resp.data);
+                  }
+                });
             }
           }
-          console.log(_this.zuoyes);
         }
+
       });
+
+
+      console.log(this.zuoyes);
     },
     computed: {
       isKong: function () {
@@ -157,7 +188,19 @@
               cid: this.$store.state.courseId
             }).then(resp => {
               if (resp && resp.status == 200) {
-                _this.zuoyes = resp.data;
+                _this.linshi = resp.data;
+                for (let zyt in _this.linshi) {
+                  this.postRequest("/szy/pgstatistics", {
+                    taskId: _this.linshi[zyt].id,
+                    courseId: _this.$store.state.courseId
+                  }).then(resp => {
+                    if (resp && resp.status == 200) {
+                      //_this.linshi[zyt].pgStatistics={};
+                      _this.$set(_this.linshi[zyt], 'pgStatistics', resp.data);
+                      if (zyt == (_this.linshi.length - 1)) _this.zuoyes = _this.linshi;
+                    }
+                  });
+                }
               }
             });
           } else
@@ -175,12 +218,30 @@
       },
       switchs: function (type, zy) {
         console.log(zy.title);
-        this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: type } });
+        this.$router.push({
+          name: "SZyDetails",
+          query: { taskId: zy.id, taskTitle: zy.title, stuStatus: type }
+        });
         // if (type == "未提交") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 1 } });
         // else if (type == "未批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 2 } });
         // else if (type == "已批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 3 } });
       },
 
+      // PgStatistic: function(zyt) {
+      //   var _this = this;
+      //   console.log(zyt);
+      //   console.log(this.$store.state.courseId);
+
+      //   this.postRequest("/szy/pgstatistics", {
+      //     taskId: zyt,
+      //     courseId: this.$store.state.courseId
+      //   }).then(resp => {
+      //     if (resp && resp.status == 200) {
+      //       _this.pgStatistics = resp.data;
+      //     }
+      //   });
+      //   return this.pgStatistics;
+      // },
 
       onChanges: function (file, fileList) {
         //console.log(file);
@@ -198,7 +259,7 @@
   };
 </script>
 <style>
-  .announce-cont-box .announce-cont .word .p {
+  .announce-cont-box .announce-cont .word .pr {
     color: #5b5b5b;
     overflow: hidden;
     line-height: 1.8;
@@ -223,7 +284,6 @@
 
   .clearfix {
     zoom: 1;
-    
   }
 
   .download {
@@ -231,5 +291,13 @@
     font-size: 12px;
     display: none;
     line-height: 24px;
+  }
+
+  .total-cont {
+    border-left-style: solid;
+    border-left-color: #c8c8c8;
+    border-left-width: 1px;
+
+    padding: 0px 43px 0px 18px;
   }
 </style>

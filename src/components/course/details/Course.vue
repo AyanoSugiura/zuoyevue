@@ -5,7 +5,7 @@
         padding: 0px;"> -->
     <div>
         <el-menu mode="horizontal" unique-opened router default-active="/coursedetails/zuoye" style="text-align: center; display: flex;  align-items: center;">
-            <el-menu-item index="/coursedetails/zuoye">作业</el-menu-item>
+            <el-menu-item index="/coursedetails/zuoye" style="margin-left: 67px">作业</el-menu-item>
             <el-menu-item index="/coursedetails/member">成员</el-menu-item>
             <el-menu-item index="/coursedetails/tchstatistic">统计</el-menu-item>
             <el-menu-item v-if="this.$store.state.user.userlevel" index="/coursedetails/setting">设置</el-menu-item>

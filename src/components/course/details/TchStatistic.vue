@@ -7,7 +7,7 @@
                 <el-table-column prop="student.name" label="名字">
                 </el-table-column>
 
-                <el-table-column v-for="(scrs,index) in tchStatistics[0].score" :key="index"  :label="index+1+''">
+                <el-table-column v-for="(scrs,index) in tchStatistics[0].score" :key="index" :label="index+1+''">
 
                     <template slot-scope="scope">
                         <p>{{scope.row.score[index].score}}</p>
@@ -23,22 +23,22 @@
     export default {
         data() {
             return {
-                tchStatistics: [{}],
+                tchStatistics: [{ score: [{ score: null }] }],
             }
         },
         created: function () {
             var _this = this;
             console.log(this.$store.state.courseId);
             //if (this.$store.state.user.userlevel == 0) {
-                this.postRequest("/task/tchstatistic", {
-                    cid: this.$store.state.courseId,
-                }).then(resp => {
-                    if (resp && resp.status == 200) {
-                        _this.tchStatistics = resp.data;
-                        console.log("统计");
-                        console.log(resp.data);
-                    }
-                });
+            this.postRequest("/task/tchstatistic", {
+                cid: this.$store.state.courseId,
+            }).then(resp => {
+                if (resp && resp.status == 200 && resp.data != '') {
+                    _this.tchStatistics = resp.data;
+                    console.log("统计");
+                    console.log(resp.data);
+                }
+            });
             //}
         },
         methods: {

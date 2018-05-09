@@ -10,6 +10,7 @@ import CourseDetails from '@/components/course/details/Course'
 import CourseDetailsZuoye from '@/components/course/details/Zuoye'
 import CourseDetailsMember from '@/components/course/details/Member'
 import TchStatistic from '@/components/course/details/TchStatistic'
+import CourseSetting from '@/components/course/details/Setting'
 
 import TZyDetails from '@/components/zuoye/tch/TZyDetails'
 import SZyDetails from '@/components/zuoye/stu/SZyDetails'
@@ -54,6 +55,16 @@ export default new Router({
               name: 'CourseDetailsMember',
               component: CourseDetailsMember
             },
+            {
+              path: '/coursedetails/tchstatistic',
+              name: 'TchStatistic',
+              component: TchStatistic
+            },
+            {
+              path: '/coursedetails/setting',
+              name: 'CourseSetting',
+              component: CourseSetting
+            },
           ]
         },
         {
@@ -86,12 +97,7 @@ export default new Router({
           name: 'StuCj',
           component: StuCj
         },
-        {
-          path: '/tchstatistic',
-          name: 'TchStatistic',
-          component: TchStatistic
-        },
-
+        
         {
           path: '/tchcreatezy',
           name: 'TchCreateZY',

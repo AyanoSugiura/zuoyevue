@@ -3,7 +3,10 @@
         <el-card class="member-el-card">
             <div slot="header" class="clearfix" style=" white-space:pre;">
                 <span>{{course.name+' 教师：'+course.teacher.name+' 学生：'+xkIsVerify.length+'人'}}</span>
-                <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                <el-upload class='ensure ensureButt' style="float: right;padding: 3px 0" :limit="1" :show-file-list="false" :action="importFileUrl" :data="ccid"
+                    :onError="uploadError" :onSuccess="uploadSuccess" :on-change="onChanges" :before-remove="bRemove" :beforeUpload="beforeAvatarUpload">
+                    <el-button style="float: right; padding: 3px 0" type="text">使用excel灵活添加学生</el-button>
+                </el-upload>
             </div>
             <div>
                 <el-table :data="xkIsVerify" style="width: 100%">
@@ -56,6 +59,8 @@
     export default {
         data() {
             return {
+                ccid: {cid:this.$store.state.courseId},
+                importFileUrl: 'http://localhost:8089/xk/exceladdmember',
                 course: {
                     teacher: {},
                 },
@@ -122,6 +127,29 @@
                     }
                 });
             },
+            onChanges: function (file, fileList) {
+                //console.log(file);
+                this.filesList = fileList;
+            },
+            uploadError: function () { },
+            bRemove: function (file, fileList) {
+                this.filesList = fileList;
+            },
+            uploadSuccess: function (response, file, fileList) {
+                console.log(fileList);
+            },
+            beforeAvatarUpload: function (file) {
+                var testmsg = file.name.substring(file.name.lastIndexOf('.') + 1);
+                const extension = testmsg === 'xls';
+                const extension2 = testmsg === 'xlsx';
+                if (!extension && !extension2) {
+                    this.$message({
+                        message: '上传文件只能是 xls、xlsx格式!',
+                        type: 'warning'
+                    });
+                }
+                return extension || extension2;
+            }
         }
     }
 </script>

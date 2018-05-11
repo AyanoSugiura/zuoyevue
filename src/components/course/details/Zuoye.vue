@@ -34,8 +34,8 @@
             </span>
           </el-col>
           <el-col :span="9">
-            <el-button v-if="$store.state.user.userlevel==0" style="margin-right: 30px;float: right;" size="small" :type="btType(zuoye.stuStatus)"
-              @click="switchs(zuoye.stuStatus,zuoye)">{{ zuoye.stuStatus }}</el-button>
+            <el-button v-if="$store.state.user.userlevel==0" style="margin-right: 30px;float: right;" size="small" :type="btType(zuoye.isSub)"
+              @click="switchs(zuoye.isSub,zuoye)">{{ zuoye.isSub }}</el-button>
 
             <div v-if="$store.state.user.userlevel==1" style="float: left;margin-left: 150px">
               <div style="float: left;" class="total-cont">
@@ -67,7 +67,7 @@
         </el-col>
       </el-row> -->
 
-      <div v-for="zy in (zuoye.files_links.split('|'))" :key="zy.length" style="margin-right: 20px;margin-bottom:50px;float: left;">
+      <div v-for="(zy,index) in (zuoye.files_links.split('|'))" :key="index" style="margin-right: 20px;margin-bottom:50px;float: left;">
 
         <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'||(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
           <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
@@ -113,40 +113,14 @@
     created: function () {
       var _this = this;
 
-      this.postRequest("/task/taskbc", {
-        cid: this.$store.state.courseId
+      this.postRequest("/szy/taskbc", {
+        cid: this.$store.state.courseId,
+        uid: this.$store.state.user.id,
+        uLevel: this.$store.state.user.userlevel
       }).then(resp => {
         if (resp && resp.status == 200) {
-          _this.linshi = resp.data;
-          //console.log(resp.data);
-
-          for (let zyt in _this.linshi) {
-            this.postRequest("/szy/pgstatistics", {
-              taskId: _this.linshi[zyt].id,
-              courseId: _this.$store.state.courseId
-            }).then(resp => {
-              if (resp && resp.status == 200) {
-                //_this.linshi[zyt].pgStatistics={};
-                _this.$set(_this.linshi[zyt], 'pgStatistics', resp.data);
-                if (zyt == (_this.linshi.length - 1)) _this.zuoyes = _this.linshi;
-              }
-            });
-          }
-          console.log(_this.linshi);
-          if (this.$store.state.user.userlevel == 0) {
-            for (let zuoye in _this.linshi) {
-              _this
-                .postRequest("/task/stutasks", {
-                  tasskId: _this.linshi[zuoye].id,
-                  uid: _this.$store.state.user.id
-                })
-                .then(resp => {
-                  if (resp && resp.status == 200) {
-                    _this.$set(_this.linshi[zuoye], "stuStatus", resp.data);
-                  }
-                });
-            }
-          }
+          _this.zuoyes = resp.data;
+          console.log(resp.data);
         }
 
       });
@@ -184,25 +158,18 @@
               duration: 2000
             });
 
-            this.postRequest("/task/taskbc", {
-              cid: this.$store.state.courseId
+            this.postRequest("/szy/taskbc", {
+              cid: this.$store.state.courseId,
+              uid: this.$store.state.user.id,
+              uLevel: this.$store.state.user.userlevel
             }).then(resp => {
               if (resp && resp.status == 200) {
-                _this.linshi = resp.data;
-                for (let zyt in _this.linshi) {
-                  this.postRequest("/szy/pgstatistics", {
-                    taskId: _this.linshi[zyt].id,
-                    courseId: _this.$store.state.courseId
-                  }).then(resp => {
-                    if (resp && resp.status == 200) {
-                      //_this.linshi[zyt].pgStatistics={};
-                      _this.$set(_this.linshi[zyt], 'pgStatistics', resp.data);
-                      if (zyt == (_this.linshi.length - 1)) _this.zuoyes = _this.linshi;
-                    }
-                  });
-                }
+                //_this.$set(_this.zuoyes,resp.data)
+                _this.zuoyes = resp.data;
+                console.log(resp.data);
               }
             });
+
           } else
             _this.$notify.error({
               title: "保存失败",

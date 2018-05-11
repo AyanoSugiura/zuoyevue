@@ -3,8 +3,9 @@
         <el-card class="member-el-card">
             <div slot="header" class="clearfix" style=" white-space:pre;">
                 <span>{{course.name+' 教师：'+course.teacher.name+' 学生：'+xkIsVerify.length+'人'}}</span>
-                <el-upload class='ensure ensureButt' style="float: right;padding: 3px 0" :limit="1" :show-file-list="false" :action="importFileUrl" :data="ccid"
-                    :onError="uploadError" :onSuccess="uploadSuccess" :on-change="onChanges" :before-remove="bRemove" :beforeUpload="beforeAvatarUpload">
+                <el-upload class='ensure ensureButt' style="float: right;padding: 3px 0" :limit="1" :show-file-list="false" :action="importFileUrl"
+                    :data="ccid" :onError="uploadError" :onSuccess="uploadSuccess" :on-change="onChanges" :before-remove="bRemove"
+                    :beforeUpload="beforeAvatarUpload">
                     <el-button style="float: right; padding: 3px 0" type="text">使用excel灵活添加学生</el-button>
                 </el-upload>
             </div>
@@ -59,7 +60,7 @@
     export default {
         data() {
             return {
-                ccid: {cid:this.$store.state.courseId},
+                ccid: { cid: this.$store.state.courseId },
                 importFileUrl: 'http://localhost:8089/xk/exceladdmember',
                 course: {
                     teacher: {},
@@ -129,14 +130,23 @@
             },
             onChanges: function (file, fileList) {
                 //console.log(file);
-                this.filesList = fileList;
+                //this.filesList = fileList;
             },
             uploadError: function () { },
             bRemove: function (file, fileList) {
-                this.filesList = fileList;
+                //this.filesList = fileList;
             },
             uploadSuccess: function (response, file, fileList) {
+                console.log("成功");
+                this.xkIsVerify = response;
                 console.log(fileList);
+                console.log(response);
+                this.$notify({
+                    title: "成功",
+                    message: "学生成员导入成功",
+                    type: "success",
+                    duration: 2000
+                });
             },
             beforeAvatarUpload: function (file) {
                 var testmsg = file.name.substring(file.name.lastIndexOf('.') + 1);

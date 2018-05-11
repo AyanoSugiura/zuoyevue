@@ -22,7 +22,7 @@
             <br/>
 
             <el-row>
-                <el-col v-for="zy in (task.files_links.split('|'))" :key="zy.length">
+                <el-col v-for="(zy,index) in (task.files_links.split('|'))" :key="index">
                     <div style="margin-bottom:5px">
                         <a :href="zy">{{zy.substring(zy.lastIndexOf("/")+1)}} </a>
                     </div>

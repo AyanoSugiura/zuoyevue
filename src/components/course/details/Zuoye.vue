@@ -20,24 +20,39 @@
     </el-collapse>
     <br/>
 
-    <el-card v-for="zuoye in zuoyes" :key="zuoye.id" style="margin-left: 50px; margin-right: 50px; margin-bottom:15px ">
+    <el-dialog :title="tassk.title" :visible.sync="dialogFormVisible" style="width: 835px">
+      <el-form :inline="true" :model="tassk" status-icon >
+        <el-form-item label="课程名称" prop="name">
+          <el-input v-model="tassk.title" placeholder="请输入课程名称"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click.native.prevent="submitClick" v-bind:disabled="isKong">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-card v-for="(zuoye,index) in zuoyes" :key="zuoye.id" style="margin-left: 50px; margin-right: 50px; margin-bottom:15px ">
       <div slot="header" class="clearfix">
         <el-row>
-          <el-col :span="15">
+          <el-col :span="14">
             <span>
               <router-link v-if="$store.state.user.userlevel==1" style="text-decoration:none" :to="{ name: 'TZyDetails', query: { taskId: zuoye.id }}">
-                <h3 class="work-title">{{zuoye.title}}</h3>
+                <h3 class="work-title">{{(zuoyes.length-index)+'、'+' '+zuoye.title}}</h3>
               </router-link>
               <router-link v-else-if="$store.state.user.userlevel==0" style="text-decoration:none" :to="{ name: 'SZyDetails', query: { taskId: zuoye }}">
                 <h3 class="work-title">{{zuoye.title}}</h3>
               </router-link>
             </span>
+              <!-- <h3 class="work-title"><el-button style="float: right; " type="text">编辑</el-button></h3> -->
           </el-col>
-          <el-col :span="9">
+          <el-col :span="2" style="padding-top: 0px">
+             <h3 class="work-title"><el-button @click="editTask(zuoye,index)"   style="float: right;padding-top: 0px " type="text"><i class="el-icon-edit">编辑</i></el-button></h3>
+          </el-col >
+          <el-col :span="8">
             <el-button v-if="$store.state.user.userlevel==0" style="margin-right: 30px;float: right;" size="small" :type="btType(zuoye.isSub)"
               @click="switchs(zuoye.isSub,zuoye)">{{ zuoye.isSub }}</el-button>
 
-            <div v-if="$store.state.user.userlevel==1" style="float: left;margin-left: 150px">
+            <div v-if="$store.state.user.userlevel==1" style="float: right;margin-right: 15px">
               <div style="float: left;" class="total-cont">
                 <p style=" color: #5b5b5b; font-size: 30px ;margin-top: 5px;margin-bottom: 0px;">{{zuoye.pgStatistics.isPg}}</p>
                 <p style=" color: green; font-size: 15px ;margin-top: 5px;margin-bottom: 3px;">已批</p>
@@ -103,6 +118,9 @@
           content: "",
           files: ""
         },
+        tassk:{},
+        ndx:null,
+        dialogFormVisible:false,
         courses: [],
         linshi: [],
         filesList: [],
@@ -194,21 +212,11 @@
         // else if (type == "已批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 3 } });
       },
 
-      // PgStatistic: function(zyt) {
-      //   var _this = this;
-      //   console.log(zyt);
-      //   console.log(this.$store.state.courseId);
-
-      //   this.postRequest("/szy/pgstatistics", {
-      //     taskId: zyt,
-      //     courseId: this.$store.state.courseId
-      //   }).then(resp => {
-      //     if (resp && resp.status == 200) {
-      //       _this.pgStatistics = resp.data;
-      //     }
-      //   });
-      //   return this.pgStatistics;
-      // },
+      editTask: function(task,index){
+        this.tassk=task;
+        this.ndx=index;
+        this.dialogFormVisible= true;
+      },
 
       onChanges: function (file, fileList) {
         //console.log(file);

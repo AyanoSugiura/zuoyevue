@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 发布作业控件 -->
     <el-collapse v-if="this.$store.state.user.userlevel==1" style="margin-left: 50px;;margin-right: 50px;" @change="collapseChange">
       <el-collapse-item title="十发布作业" name="1">
         <el-form ref="upLoadData" :model="upLoadData" label-width="80px">
@@ -19,18 +20,24 @@
       </el-collapse-item>
     </el-collapse>
     <br/>
-
-    <el-dialog :title="tassk.title" :visible.sync="dialogFormVisible" style="width: 835px">
-      <el-form :inline="true" :model="tassk" status-icon >
-        <el-form-item label="课程名称" prop="name">
+    <!-- 每个任务修改对话框 -->
+    <el-dialog :title="(zuoyes.length-ndx)+'、'+'  '+tassk.title" :visible.sync="dialogFormVisible" style="width: 1000px;margin-left: 300px ">
+      <el-form :model="tassk" status-icon style="width: 100%;">
+        <el-form-item label="标题" prop="name">
           <el-input v-model="tassk.title" placeholder="请输入课程名称"></el-input>
         </el-form-item>
+        <el-form-item label="要求">
+          <el-input type="textarea" v-model="tassk.content" placeholder="作业简介，作业格式等要求"></el-input>
+        </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click.native.prevent="submitClick" v-bind:disabled="isKong">确 定</el-button>
+          <el-upload class='ensure ensureButt' :action="importFileUrl" :file-list="tasskFiles" :on-change="tasskFilesChanges" :before-remove="tasskFilesRemove">
+            <el-button slot="trigger" size="small" type="primary">上传文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="editSubmit" v-bind:disabled="taskFilesIsKong">保存</el-button>
+          </el-upload>
         </el-form-item>
       </el-form>
     </el-dialog>
-
+    <!-- 遍历并展示所有控件 -->
     <el-card v-for="(zuoye,index) in zuoyes" :key="zuoye.id" style="margin-left: 50px; margin-right: 50px; margin-bottom:15px ">
       <div slot="header" class="clearfix">
         <el-row>
@@ -43,11 +50,15 @@
                 <h3 class="work-title">{{zuoye.title}}</h3>
               </router-link>
             </span>
-              <!-- <h3 class="work-title"><el-button style="float: right; " type="text">编辑</el-button></h3> -->
+            <!-- <h3 class="work-title"><el-button style="float: right; " type="text">编辑</el-button></h3> -->
           </el-col>
           <el-col :span="2" style="padding-top: 0px">
-             <h3 class="work-title"><el-button @click="editTask(zuoye,index)"   style="float: right;padding-top: 0px " type="text"><i class="el-icon-edit">编辑</i></el-button></h3>
-          </el-col >
+            <h3 class="work-title">
+              <el-button @click="editTask(zuoye,index)" style="float: right;padding-top: 0px " type="text">
+                <i class="el-icon-edit">编辑</i>
+              </el-button>
+            </h3>
+          </el-col>
           <el-col :span="8">
             <el-button v-if="$store.state.user.userlevel==0" style="margin-right: 30px;float: right;" size="small" :type="btType(zuoye.isSub)"
               @click="switchs(zuoye.isSub,zuoye)">{{ zuoye.isSub }}</el-button>
@@ -69,8 +80,6 @@
           </el-col>
         </el-row>
       </div>
-
-
 
       <div class="word">
         <div class="pr">{{zuoye.content}}</div>
@@ -97,13 +106,9 @@
         </div>
 
       </div>
-
-
       <!-- </el-row> -->
-
-
-
     </el-card>
+
   </div>
 </template>
 
@@ -118,14 +123,24 @@
           content: "",
           files: ""
         },
-        tassk:{},
-        ndx:null,
-        dialogFormVisible:false,
+
+        tassk: {},
+        ndx: null,
+        tasskFiles: [],
+        tasskFilesHelps: [],
+        filee: {
+          name: "",
+          response: "",
+          status: "success",
+          url: ""
+        },
+
+        dialogFormVisible: false,
         courses: [],
         linshi: [],
         filesList: [],
         filesList2: [],
-        zuoyes: [],
+        zuoyes: []
       };
     },
     created: function () {
@@ -140,15 +155,16 @@
           _this.zuoyes = resp.data;
           console.log(resp.data);
         }
-
       });
-
 
       console.log(this.zuoyes);
     },
     computed: {
       isKong: function () {
         return this.upLoadData.title === "";
+      },
+      taskFilesIsKong: function () {
+        return this.tasskFiles.length == 0;
       }
     },
     methods: {
@@ -187,7 +203,6 @@
                 console.log(resp.data);
               }
             });
-
           } else
             _this.$notify.error({
               title: "保存失败",
@@ -212,11 +227,61 @@
         // else if (type == "已批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 3 } });
       },
 
-      editTask: function(task,index){
-        this.tassk=task;
-        this.ndx=index;
-        this.dialogFormVisible= true;
+
+      //以下单个任务修改
+      editTask: function (task, index) {
+        this.tassk = task;
+        this.ndx = index;
+        this.tasskFiles = [];
+        var fls = task.files_links.split('|');
+        for (let fl in fls) {
+          this.filee = {};
+          this.$set(this.filee, 'name', (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1));
+          this.$set(this.filee, 'response', fls[fl]);
+          this.$set(this.filee, 'url', fls[fl]);
+          this.$set(this.filee, 'status', 'success');
+          console.log(this.filee);
+          this.tasskFiles.push(this.filee);
+        }
+        this.dialogFormVisible = true;
       },
+
+      editSubmit: function () {
+        var _this = this;
+        this.tasskFilesHelps = [];
+        for (let fl in this.tasskFiles) {
+          this.tasskFilesHelps.push(this.tasskFiles[fl].response);
+        }
+        this.postRequest("/szy/taskalter", {
+          cid: this.$store.state.courseId,
+          id: this.tassk.id,
+          title: this.tassk.title,
+          content: this.tassk.content,
+          files_links: this.tasskFilesHelps.join("|")
+        }).then(resp => {
+          if (resp && resp.status == 200 && resp.data != "") {
+            _this.$set(_this.zuoyes,  _this.ndx, resp.data);
+            _this.$notify({
+              title: "成功",
+              message: "作业修改成功",
+              type: "success",
+              duration: 2000
+            });
+            _this.tassk = {};
+            _this.tasskFiles = [];
+            _this.tasskFilesHelps = [];
+            _this.ndx = null
+            _this.filee = {};
+            _this.dialogFormVisible = false;
+          } else
+            _this.$notify.error({
+              title: "作业修改失败",
+              message: "请联系管理员"
+            });
+        });
+
+      },
+
 
       onChanges: function (file, fileList) {
         //console.log(file);
@@ -229,8 +294,18 @@
       uploadSuccess: function (response, file, fileList) {
         console.log(fileList);
       },
-      beforeAvatarUpload: function () { }
-    }
+      beforeAvatarUpload: function () { },
+
+      tasskFilesChanges: function (file, fileList) {
+        this.tasskFiles = fileList;
+        console.log(this.tasskFiles);
+      },
+      tasskFilesRemove: function (file, fileList) {
+        this.tasskFiles = fileList;
+        console.log(this.tasskFiles);
+      }
+    },
+
   };
 </script>
 <style>

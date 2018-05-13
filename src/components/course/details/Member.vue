@@ -3,9 +3,9 @@
         <el-card class="member-el-card">
             <div slot="header" class="clearfix" style=" white-space:pre;">
                 <span>{{course.name+' 教师：'+course.teacher.name+' 学生：'+xkIsVerify.length+'人'}}</span>
-                <el-upload class='ensure ensureButt' style="float: right;padding: 3px 0" :limit="1" :show-file-list="false" :action="importFileUrl"
-                    :data="ccid" :onError="uploadError" :onSuccess="uploadSuccess" :on-change="onChanges" :before-remove="bRemove"
-                    :beforeUpload="beforeAvatarUpload">
+                <el-upload v-if="$store.state.user.userlevel==1" class='ensure ensureButt' style="float: right;padding: 3px 0" :limit="1"
+                    :show-file-list="false" :action="importFileUrl" :data="ccid" :onError="uploadError" :onSuccess="uploadSuccess"
+                    :on-change="onChanges" :before-remove="bRemove" :beforeUpload="beforeAvatarUpload">
                     <el-button style="float: right; padding: 3px 0" type="text">使用excel灵活添加学生</el-button>
                 </el-upload>
             </div>
@@ -20,7 +20,7 @@
             </div>
         </el-card>
         <br/>
-        <el-card class="member-el-card">
+        <el-card v-if="$store.state.user.userlevel==1" class="member-el-card">
             <div slot="header" class="clearfix" style=" white-space:pre;">
                 <span>加入待审核</span>
                 <el-button style="float: right; padding: 3px 0" type="text">全部通过</el-button>
@@ -40,7 +40,7 @@
 
         </el-card>
         <br/>
-        <el-card class="member-el-card">
+        <el-card v-if="$store.state.user.userlevel==1" class="member-el-card">
             <div slot="header" class="clearfix" style=" white-space:pre;">
                 <span>审核未通过</span>
                 <el-button style="float: right; padding: 3px 0" type="text">全部通过</el-button>
@@ -72,8 +72,10 @@
         },
         created: function () {
             var _this = this;
-            this.memberTypesSele(1);
-            this.memberTypesSele(0);
+            if (this.$store.state.user.userlevel == 1) {
+                this.memberTypesSele(1);
+                this.memberTypesSele(0);
+            }
             this.memberTypesSele(2);
             this.postRequest("/course/findcourse", {
                 cid: this.$store.state.courseId,

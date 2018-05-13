@@ -21,7 +21,7 @@
     </el-collapse>
     <br/>
     <!-- 每个任务修改对话框 -->
-    <el-dialog :title="(zuoyes.length-ndx)+'、'+'  '+tassk.title" :visible.sync="dialogFormVisible" style="width: 1000px;margin-left: 300px ">
+    <el-dialog v-if="$store.state.user.userlevel==1" :title="(zuoyes.length-ndx)+'、'+'  '+tassk.title" :visible.sync="dialogFormVisible" style="width: 1000px;margin-left: 300px ">
       <el-form :model="tassk" status-icon style="width: 100%;">
         <el-form-item label="标题" prop="name">
           <el-input v-model="tassk.title" placeholder="请输入课程名称"></el-input>
@@ -54,7 +54,7 @@
           </el-col>
           <el-col :span="2" style="padding-top: 0px">
             <h3 class="work-title">
-              <el-button @click="editTask(zuoye,index)" style="float: right;padding-top: 0px " type="text">
+              <el-button v-if="$store.state.user.userlevel==1" @click="editTask(zuoye,index)" style="float: right;padding-top: 0px " type="text">
                 <i class="el-icon-edit">编辑</i>
               </el-button>
             </h3>

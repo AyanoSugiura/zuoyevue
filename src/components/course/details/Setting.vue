@@ -17,7 +17,7 @@
 
                     <br/>
                     <div v-for="(sl,index) in scroels" :key="index">
-                        <p>{{sl}}}对应百分制</p>
+                        <p>{{sl}}对应百分制</p>
                     </div>
                     <!-- <div>
                         <el-form :model="settingCourse" status-icon :rules="settingCourseNameRules" style="width: 100%;">

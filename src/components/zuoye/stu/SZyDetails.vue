@@ -78,8 +78,8 @@
                 filesList: [],
                 filesList2: [],
                 stuZuoye: {
-                    files_links:'',
-                    tassk:{}
+                    files_links: '',
+                    tassk: {}
                 }
             }
         },
@@ -95,12 +95,14 @@
                     _this.stuZuoye = resp.data;
                     _this.upLoadData.liuyan = (_this.stuZuoye.content == null) ? '' : _this.stuZuoye.content;
                     _this.upLoadData.tchLiuyan = (_this.stuZuoye.comment == null) ? '' : _this.stuZuoye.comment;
-                     _this.filesList=[];
-                    var fls=_this.stuZuoye.files_links.split('|');
-                    for (let fl in fls ) {
-                        _this.filee.name = (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1);
-                        _this.filee.response = fls[fl];
-                        _this.filee.url = fls[fl]
+                    _this.filesList = [];
+                    var fls = _this.stuZuoye.files_links.split('|');
+                    for (let fl in fls) {
+                        _this.filee={};
+                        this.$set(this.filee, 'name', (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1));
+                        this.$set(this.filee, 'response', fls[fl]);
+                        this.$set(this.filee, 'url', fls[fl]);
+                        this.$set(this.filee, 'status', 'success');
                         _this.filesList.push(_this.filee);
                     }
                     console.log(_this.stuZuoye);
@@ -148,7 +150,7 @@
         methods: {
             submitUpload: function () {
                 var _this = this;
-                this.filesList2=[];
+                this.filesList2 = [];
                 for (let fl in this.filesList) {
                     this.filesList2.push(this.filesList[fl].response);
                 }

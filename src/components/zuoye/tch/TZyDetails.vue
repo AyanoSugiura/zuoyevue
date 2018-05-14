@@ -15,40 +15,68 @@
         </div>
 
         <div v-else>
-            <el-collapse v-for="stuZuoye in stuZuoyes" :key="stuZuoye.id" style="background-color: white;width: 1100px;margin-left: 80px;margin-bottom : 15px;"
-                accordion>
-                <el-collapse-item :title="stuZuoye.student.name" name="1" style="padding-left: 20px">
+            <el-card v-for="stuZuoye in stuZuoyes" :key="stuZuoye.id" style="margin-left: 50px; margin-right: 50px; margin-bottom:15px ">
 
+                <div class="clearfix" style="margin-bottom: 0px">
                     <el-row>
-                        <el-col v-for="zyf in (stuZuoye.files_links.split('|'))" :key="zyf.length">
-                            <div style="margin-bottom:5px">
-                                <a :href="zyf">{{zyf.substring(zyf.lastIndexOf("/")+1)}} </a>
-                            </div>
+                        <el-col :span="18">
+                            <span>
+                                <h3 class="work-title" style="margin-left:15px ">{{stuZuoye.student.name}}</h3>
+                            </span>
+                        </el-col>
+                        <el-col v-if="selectForm.type=='已批'" :span="6">
+                            <h3 class="work-title" style="color: red;float: right;margin-right:55px ">成绩：{{stuZuoye.score}}</h3>
                         </el-col>
                     </el-row>
+                </div>
 
-                    <el-form label-width="70px" style="margin-top: 25px;">
-                        <el-form-item label="作业留言" style="margin-right: 55px;">
-                            <el-input type="textarea" v-model="stuZuoye.content" :disabled="true" placeholder="无"></el-input>
-                        </el-form-item>
-                        <el-form-item label="老师评语" style="margin-right: 55px;">
-                            <el-input type="textarea" v-model="stuZuoye.comment" placeholder="点击添加评论（仅改作业的学生可看）..."></el-input>
-                        </el-form-item>
-                    </el-form>
 
-                    <el-button style="margin-right: 55px;margin-bottom : 35px;float: right;" type="success" plain @click="submitPg(stuZuoye)"
-                        v-bind:disabled="isKong">{{(stuZuoye.isPg==0) ? '提交':'更改批改'}}</el-button>
-                    <el-select v-model="stuZuoye.score" placeholder="请打分" style="margin-right: 55px;margin-bottom : 35px;float: right;">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label">
-                        </el-option>
-                    </el-select>
-                    <!-- <el-select v-if="selectForm.type=='未批'" v-model="value" placeholder="请打分" style="margin-right: 55px;margin-bottom : 35px;float: right;">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label">
-                        </el-option>
-                    </el-select> -->
+                <el-collapse style="background-color: white;margin-bottom : 15px;margin-top: 0px" accordion>
+                    <el-collapse-item title="作业文件、留言等详情,点击展开" name="1" style="padding-left: 20px">
 
-                </el-collapse-item>
-            </el-collapse>
+                        <!-- <el-row>
+                            <el-col v-for="zyf in (stuZuoye.files_links.split('|'))" :key="zyf.length">
+                                <div style="margin-bottom:5px">
+                                    <a :href="zyf">{{zyf.substring(zyf.lastIndexOf("/")+1)}} </a>
+                                </div>
+                            </el-col>
+                        </el-row> -->
+
+                        <div v-for="(zy,index) in (stuZuoye.files_links.split('|'))" :key="index" style="margin-right: 20px;margin-bottom:50px;float: left;">
+
+                            <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'||(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
+                                <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
+                                    height="80px" width="80px">
+                            </div>
+                            <div v-else>
+                                <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
+                            </div>
+                            <div>
+                                <a :href="zy" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>5?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,5)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
+                                </a>
+                            </div>
+
+                        </div>
+                        <el-form label-width="70px" style="margin-top: 25px;clear:both">
+                            <el-form-item label="作业留言" style="margin-right: 55px;">
+                                <el-input type="textarea" v-model="stuZuoye.content" :disabled="true" placeholder="无"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </el-collapse-item>
+                </el-collapse>
+
+                <el-form label-width="70px" style="margin-top: 25px;margin-left: 22px;">
+                    <el-form-item label="老师评语" style="margin-right: 55px;">
+                        <el-input type="textarea" v-model="stuZuoye.comment" placeholder="点击添加评论（仅改作业的学生可看）..."></el-input>
+                    </el-form-item>
+                </el-form>
+                <el-button style="margin-right: 55px;margin-bottom : 35px;float: right;" type="success" plain @click="submitPg(stuZuoye)"
+                    v-bind:disabled="isKong">{{(stuZuoye.isPg==0) ? '提交':'更改批改'}}</el-button>
+                <el-select v-model="stuZuoye.score" placeholder="请打分" style="margin-right: 55px;margin-bottom : 35px;float: right;">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label">
+                    </el-option>
+                </el-select>
+            </el-card>
         </div>
 
     </div>
@@ -94,7 +122,7 @@
                     {
                         value: 9,
                         label: "0"
-                    },
+                    }
                 ],
                 //value: '',
                 selectForm: {
@@ -102,15 +130,15 @@
                 },
                 upLoadData: {
                     liuyan: "",
-                    tchLiuyan: "",
+                    tchLiuyan: ""
                 },
                 stuZuoyes: [],
                 unSubs: []
-            }
+            };
         },
         computed: {
             isKong: function () {
-                return this.value == '';
+                return this.value == "";
             }
         },
         created: function () {
@@ -135,7 +163,6 @@
                     _this.unSubs = resp.data;
                 }
             });
-
         },
 
         // computed: {
@@ -185,9 +212,9 @@
                     }).then(resp => {
                         if (resp && resp.status == 200) {
                             _this.stuZuoyes = resp.data;
-                            _this.$notify({ 
+                            _this.$notify({
                                 title: "成功",
-                                message: _type==1?'作业已更新批改':'批改成功',
+                                message: _type == 1 ? "作业已更新批改" : "批改成功",
                                 type: "success",
                                 duration: 2000
                             });
@@ -206,8 +233,7 @@
                             _this.stuZuoyes = resp.data;
                         }
                     });
-                }
-                else if (this.selectForm.type == "未批") {
+                } else if (this.selectForm.type == "未批") {
                     this.postRequest("/szy/ispg", {
                         taskId: this.$route.query.taskId,
                         isPg: 0
@@ -222,9 +248,51 @@
             },
 
             stuZyScore: function (szyScr) {
-                return szyScr == null ? '' : szyScr;
+                return szyScr == null ? "" : szyScr;
             }
-
-        },
-    }
+        }
+    };
 </script>
+<style>
+    .announce-cont-box .announce-cont .word .pr {
+        color: #5b5b5b;
+        overflow: hidden;
+        line-height: 1.8;
+    }
+
+    .word {
+        height: auto;
+        overflow: auto;
+        max-height: inherit;
+    }
+
+    h3 {
+        color: #5b5b5b;
+        display: block;
+        font-size: 1.05em;
+        -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        font-weight: bold;
+    }
+
+    .clearfix {
+        zoom: 1;
+    }
+
+    .download {
+        color: #4d90fe;
+        font-size: 12px;
+        display: none;
+        line-height: 24px;
+    }
+
+    .total-cont {
+        border-left-style: solid;
+        border-left-color: #c8c8c8;
+        border-left-width: 1px;
+
+        padding: 0px 43px 0px 18px;
+    }
+</style>

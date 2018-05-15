@@ -18,6 +18,8 @@
                         <p></p>
                     </template>
                 </el-table-column>
+
+                <el-table-column prop="stuAv" label="平时分"/>
             </el-table>
         </div>
     </div>

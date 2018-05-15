@@ -5,20 +5,42 @@
             <el-col :span="12">
                 <el-card style="width: 98%">
                     <div slot="header" class="clearfix">
-                        <p class="setting-card-heading">课程细节设置</p>
+                        <p class="setting-card-heading">课程分数细节设置</p>
 
                     </div>
                     <p>当前课程名称：{{' '+settingCourseName}}</p>
                     <p style="float: left;">是否批改评分设置 "阅"：{{' '}}</p>
-                    <el-switch v-model="yueOpen" style="margin-top: 12px" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否">
-                    </el-switch>
-                    <br/>
-                    <p v-if="yueOpen==true">"阅"对应分数：{{' '}}</p>
+                    <el-switch v-model="yueOpen" style="margin-top: 12px" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否"
+                    />
 
-                    <br/>
-                    <div v-for="(sl,index) in scroels" :key="index">
-                        <p>{{sl}}对应百分制</p>
+                    <br style="clear:both" />
+                    <div  v-if="yueOpen==true">
+                        <p style="float: left;">"阅"对应分数：{{' '}}</p>
+                        <el-input-number v-model="(selectscr)[9]" @change="onChange" :min="60" :max="100" size="small" style="margin-left: 55px;"
+                        />
                     </div>
+
+                    <br style="clear:both" />
+                    <div v-for="(sl,index) in scroels" :key="index">
+                        <p style="float: left;" size="mini">{{sl}}对应百分制</p>
+                        <el-select v-model="(selectscr)[index]" @change="onChange" placeholder="请选择" style="margin-right: 225px;float: right;">
+                            <div v-if="sl=='A+'">
+                                <el-option v-for="(item,_index) in [95,96,97,98,99,100]" :key="_index" :label="item" :value="item" />
+                            </div>
+                            <div v-else-if="index%2==0">
+                                <el-option v-for="(item,_index) in options" :key="_index" :label="(90-Math.floor(index/2)*10)+item+5" :value="(90-Math.floor(index/2)*10)+item+5"
+                                />
+                            </div>
+                            <div v-else-if="index%2==1">
+                                <el-option v-for="(item,_index) in options" :key="_index" :label="(90-Math.floor(index/2)*10)+item" :value="(90-Math.floor(index/2)*10)+item"
+                                />
+                            </div>
+                        </el-select>
+                        <br style="clear:both" />
+                    </div>
+                    <p style="float: left;" size="mini">E 对应百分制</p>
+                    <el-input-number v-model="(selectscr)[8]" @change="onChange" :min="1" :max="59" size="small" style="margin-left: 66px;" />
+                    <br style="clear:both" />
                     <!-- <div>
                         <el-form :model="settingCourse" status-icon :rules="settingCourseNameRules" style="width: 100%;">
                             <el-row>
@@ -98,11 +120,14 @@
                 });
             };
             return {
+                options: [0, 1, 2, 3, 4],
+
                 yueOpen: true,
-                scroels: ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D', 'E'],
+                scroels: ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D'],
                 settingCourse: {},
                 nocanB: true,
                 settingCourseName: "",
+                selectscr: [],
                 settingCourseNameRules: {
                     name: [{ validator: validateName, trigger: "change" }]
                 }
@@ -117,6 +142,7 @@
                 if (resp && resp.status == 200) {
                     _this.settingCourse = resp.data;
                     _this.settingCourseName = _this.settingCourse.name;
+                    _this.selectscr = _this.settingCourse.selectscr.split('|')
                     console.log(_this.settingCourse);
                 }
             });
@@ -144,6 +170,21 @@
                         console.log(_this.settingCourse);
                     }
                 });
+            },
+            onChange: function () {
+                var _this = this;
+                setTimeout(function () {
+                    console.log(_this.selectscr);
+                }, 5);
+                this.postRequest("/course/alterselect", {
+                    cid: this.$store.state.courseId,
+                    selectscr: this.selectscr.join("|")
+                }).then(resp => {
+                    if (resp && resp.status == 200) {
+                        _this.settingCourse = resp.data;
+                    }
+                });
+
             }
         }
     };

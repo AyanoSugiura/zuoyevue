@@ -113,14 +113,18 @@
                     },
                     {
                         value: 7,
-                        label: "D"
+                        label: "D+"
                     },
                     {
                         value: 8,
-                        label: "E"
+                        label: "D"
                     },
                     {
                         value: 9,
+                        label: "E"
+                    },
+                    {
+                        value: 10,
                         label: "0"
                     }
                 ],

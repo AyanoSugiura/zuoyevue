@@ -180,7 +180,7 @@
                                 duration: 2000
                             });
                         }
-                        else if (resp.data.subStatus == "已重新提交") {
+                        else if (resp.data.subStatus == "已批改，不能提交") {
                             _this.$notify.error({
                                 title: '提交失败',
                                 message: '已批改，不能提交'

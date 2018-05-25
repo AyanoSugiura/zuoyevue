@@ -1,7 +1,7 @@
 <template>
     <div>
         <a style="color:#c8c8c8;text-decoration:none;font-size: 20px;margin-bottom: 20px" :href="tchStatistics[0].excelLink">
-            <i class="el-icon-upload">点击此处把统计数据导出成Excel文件</i>
+            <i class="el-icon-upload"></i><span>点击此处把统计数据导出成Excel文件</span>
         </a>
         <br/>
         <div>

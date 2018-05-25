@@ -18,6 +18,8 @@ import SZyDetails from '@/components/zuoye/stu/SZyDetails'
 import StuZuoye from '@/components/zuoye/stu/StuZuoye'
 import StuCj from '@/components/zuoye/stu/StuCj'
 
+import SelfM from '@/components/SelfM'
+
 import TchCreateZY from '@/components/zuoye/tch/CreateZY'
 import TchNewZY from '@/components/zuoye/tch/NewZY'
 
@@ -97,7 +99,14 @@ export default new Router({
           name: 'StuCj',
           component: StuCj
         },
+
+        {
+          path: '/selfm',
+          name: 'SelfM',
+          component: SelfM
+        },
         
+
         {
           path: '/tchcreatezy',
           name: 'TchCreateZY',

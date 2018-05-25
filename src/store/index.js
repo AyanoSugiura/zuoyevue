@@ -27,6 +27,12 @@ export default new Vuex.Store({
       state.user = user;
       window.localStorage.setItem('user', JSON.stringify(user));
     },
+    alterMsg(state,data){
+      state.user.name=data.name;
+      state.user.phone=data.phone;
+      console.log(data.phone);
+      window.localStorage.setItem('user', JSON.stringify(state.user));
+    },
     logout(state){
       window.localStorage.removeItem('user');
       window.localStorage.removeItem('courseId');

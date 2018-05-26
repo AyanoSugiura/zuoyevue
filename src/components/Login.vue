@@ -67,7 +67,7 @@ export default {
             _this.$store.commit('login', resp.data);
             _this.$store.commit('setCourseId',null);
             var path = _this.$route.query.redirect;
-            var pathS;
+            var pathS='/';
             if(_this.$store.state.user.userlevel==0)pathS="/stucourse";
             else if(_this.$store.state.user.userlevel==1)pathS="/tchcourse";
             

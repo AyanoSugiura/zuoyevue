@@ -20,7 +20,7 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="180px" class="home-aside">
+      <el-aside width="180px" class="home-aside" v-if="ulevel==0||ulevel==1">
         <div v-if="ulevel==0" style="display: flex;justify-content: flex-start;width: 180px;text-align: left;">
           <stum/>
         </div>
@@ -29,7 +29,8 @@
         </div>
       </el-aside>
       <el-main class="home-main">
-        <router-view></router-view>
+        <router-view v-if="ulevel==0||ulevel==1"></router-view>
+        <admin v-if="ulevel==2"></admin>
       </el-main>
     </el-container>
 
@@ -47,8 +48,7 @@
       var pathSs;
       if (this.$store.state.user.userlevel == 0) pathSs = "/stucourse";
       else if (this.$store.state.user.userlevel == 1) pathSs = "/tchcourse";
-      console.log();
-      if(this.$route.name=="Home") this.$router.replace({ path: pathSs });
+      if(this.$route.name=="Home" && this.$store.state.user.userlevel != 2) this.$router.replace({ path: pathSs });
     },
     computed: {
       courseIs: function () {

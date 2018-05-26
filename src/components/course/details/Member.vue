@@ -91,7 +91,7 @@
             intoVerify: function (index, rootr, choose) {
                 console.log("通过");
                 var _this = this;
-                var _sid = rootr == 2 ? this.xkIsVerify[index].student.id : (rootr == 1 ? this.xkNoVerify[index].student.id : this.xkNoVerify[index].student.id);
+                var _sid = rootr == 2 ? this.xkIsVerify[index].student.id : (rootr == 1 ? this.xkNoVerify[index].student.id : this.xkIsConfuse[index].student.id);
                 console.log(_sid);
                 this.postRequest("/xk/verify", {
                     sid: _sid,

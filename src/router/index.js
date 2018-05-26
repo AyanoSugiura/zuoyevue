@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 import Register from '@/components/Register'
+import Admin from '@/components/Admin'
+
 import StuCourse from '@/components/course/StuCourse'
 import TchCourse from '@/components/course/TchCourse'
 
@@ -36,6 +38,11 @@ export default new Router({
       path: '/Register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/Admin',
+      name: 'Admin',
+      component: Admin
     },
     {
       path: '/',

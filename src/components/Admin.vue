@@ -204,7 +204,6 @@
         }
       },
       intoVerify: function (index, rootr, choose) {
-        console.log(index);
         var _this = this;
         var _tid = rootr == 2 ? this.tchisVerifys[index].id : (rootr == 1 ? this.tchNoVerifys[index].id : this.tchIsConfuses[index].id);
         this.postRequest("/admin/verifyTeacher", {
@@ -216,11 +215,10 @@
           toVerify: choose
         }).then(resp => {
           if (resp && resp.status == 200) {
-            console.log(_this);
             if (rootr == 1) {
               if ((resp.data.users == "" || resp.data.users == null) && _this.tchNoVerify != 1) {
                 _this.tchStatusVerifys(1, (_this.nowPage - 2) * 6)
-                _this.nowPage = _this.tchNoVerify;
+                _this.nowPage = Math.ceil(_this.tchNoVerify / 6);
               } else { _this.tchNoVerifys = resp.data.users; _this.tchNoVerify = resp.data.page }
             } else if (rootr == 0) {
               if (resp.data == "" || resp.data == null) {
@@ -237,6 +235,7 @@
       },
 
       NoVerifysPageChange: function (e) {
+        console.log(e);
         this.nowPage = e;
         var _this = this;
         _this.postRequest("/admin/tchNoVerifysPage", {
@@ -260,8 +259,8 @@
           page: 6
         }).then(resp => {
           if (resp && resp.status == 200 && resp.data != "") {
-            if (vrf == 0) { _this.tchIsConfuse = resp.data.page;_this.tchIsConfuses = resp.data.users;  }
-            if (vrf == 1) { _this.tchNoVerify = resp.data.page;_this.tchNoVerifys = resp.data.users; }
+            if (vrf == 0) { _this.tchIsConfuse = resp.data.page; _this.tchIsConfuses = resp.data.users; }
+            if (vrf == 1) { _this.tchNoVerify = resp.data.page; _this.tchNoVerifys = resp.data.users; }
             if (vrf == 2) { _this.tchisVerifys = resp.data.users; }
           }
         });

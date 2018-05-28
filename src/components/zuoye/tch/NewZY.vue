@@ -18,7 +18,7 @@
             </el-form>
         </el-dialog>
         <!-- 最新作业遍历 -->
-        <el-card v-for="(task,index) in tasks" :key="task.id" style=" margin-right: 50px; margin-bottom:15px ">
+        <el-card v-for="(task,index) in tasks" :key="task.id" style=" margin-left: 9%;margin-right: 5%; width: 80%;; margin-top:20px ">
             <div slot="header" class="clearfix">
                 <el-row>
                     <el-col :span="10">

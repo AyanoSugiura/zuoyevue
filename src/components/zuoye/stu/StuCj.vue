@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <el-table :data="studentWorks" style="width: 100%">
+            <el-table :data="studentWorks" style="width: 70%">
                 <el-table-column prop="tassk.course.name" label="课程名字">
                 </el-table-column>
                 <el-table-column prop="tassk.title" label="作业名">

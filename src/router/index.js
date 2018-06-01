@@ -16,6 +16,7 @@ import CourseSetting from '@/components/course/details/Setting'
 
 import TZyDetails from '@/components/zuoye/tch/TZyDetails'
 import SZyDetails from '@/components/zuoye/stu/SZyDetails'
+import ZyPdfView from '@/components/zuoye/pdfv/ZyPdfView'
 
 import StuZuoye from '@/components/zuoye/stu/StuZuoye'
 import StuCj from '@/components/zuoye/stu/StuCj'
@@ -43,6 +44,11 @@ export default new Router({
       path: '/Admin',
       name: 'Admin',
       component: Admin
+    },
+    {
+      path: '/ZyPdfView',
+      name: 'ZyPdfView',
+      component: ZyPdfView
     },
     {
       path: '/',
@@ -89,7 +95,7 @@ export default new Router({
         {
           path: '/tzydetails',
           name: 'TZyDetails',
-          component: TZyDetails
+          component: TZyDetails,
         },
         {
           path: '/szydetails',
@@ -112,7 +118,7 @@ export default new Router({
           name: 'SelfM',
           component: SelfM
         },
-        
+
 
         {
           path: '/tchcreatezy',

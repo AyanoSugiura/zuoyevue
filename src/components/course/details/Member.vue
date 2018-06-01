@@ -15,6 +15,7 @@
             </div>
             <div>
                 <el-table :data="xkIsVerify.studentCourses" stripe border style="width: 100%">
+                    <el-table-column prop="student.id" label="uid" />
                     <el-table-column prop="student.name" label="学生姓名" />
                     <el-table-column prop="student.phone" label="电话" />
                     <el-table-column label="操作">
@@ -36,6 +37,7 @@
                 <el-button style="float: right; padding: 3px 0" type="text">全部通过</el-button>
             </div>
             <el-table :data="xkNoVerify.studentCourses" style="width: 100%">
+                 <el-table-column prop="student.id" label="uid" />
                 <el-table-column prop="student.name" label="学生姓名">
                 </el-table-column>
                 <el-table-column prop="student.phone" label="电话">

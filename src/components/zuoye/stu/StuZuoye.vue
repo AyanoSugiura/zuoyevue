@@ -1,5 +1,15 @@
 <template>
   <div>
+    <!-- 最新作业的为空时 -->
+    <el-card v-if="tasks==null||tasks.length==0" style=" margin-left: 9%;margin-right: 5%; width: 80%;height: 100%;; margin-top:20px ">
+      <div slot="header" class="clearfix">
+        <p class="setting-card-heading">最新作业</p>
+      </div>
+      <el-table :data="tasks" style="width: 100%;margin-bottom: 25px">
+        <el-table-column prop="id" />
+      </el-table>
+    </el-card>
+
     <el-card v-for="(task,index) in tasks" :key="index" style=" margin-right: 50px; margin-bottom:15px ">
       <div slot="header" class="clearfix">
         <el-row>
@@ -75,7 +85,7 @@
       },
       switchs: function (type, task) {
         console.log(task.title);
-        this.$router.push({ name: 'SZyDetails', query: { taskId: task.id,taskTitle: task.title, stuStatus: type } });
+        this.$router.push({ name: 'SZyDetails', query: { taskId: task.id, taskTitle: task.title, stuStatus: type } });
       },
     }
   }

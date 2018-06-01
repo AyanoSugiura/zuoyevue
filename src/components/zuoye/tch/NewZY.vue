@@ -1,5 +1,15 @@
 <template>
     <div>
+        <!-- 最新作业的为空时 -->
+        <el-card v-if="tasks==null||tasks.length==0" style=" margin-left: 9%;margin-right: 5%; width: 80%;height: 100%;; margin-top:20px ">
+            <div slot="header" class="clearfix">
+                <p class="setting-card-heading">最新作业</p>
+            </div>
+            <el-table :data="tasks" style="width: 100%;margin-bottom: 25px">
+                <el-table-column prop="id" />
+            </el-table>
+        </el-card>
+
         <!-- 每个任务修改对话框 -->
         <el-dialog :title="(tasks.length-ndx)+'、'+'  '+tassk.title" :visible.sync="dialogFormVisible" style="width: 1000px;margin-left: 300px ">
             <el-form :model="tassk" status-icon style="width: 100%;">
@@ -94,9 +104,7 @@
                 tasskFiles: [],
                 tasskFilesHelps: [],
                 dialogFormVisible: false,
-                tasks: [
-
-                ],
+                tasks: [],
             }
         },
         created: function () {

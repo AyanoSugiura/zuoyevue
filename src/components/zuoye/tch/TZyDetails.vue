@@ -10,12 +10,29 @@
             </el-form-item>
         </el-form>
         <br/>
+        <!-- 最新作业的为空时 -->
+        <el-card v-if="((stuZuoyes==null||stuZuoyes.length==0)&&(selectForm.type=='已批'||selectForm.type=='未批'))||((unSubs==null||unSubs.length==0)&&(selectForm.type=='未交'))"
+            style=" margin-left: 9%;margin-right: 5%; width: 80%;height: 100%;; margin-top:20px ">
+            <div slot="header" class="clearfix">
+                <p class="setting-card-heading">作业情况</p>
+            </div>
+            <el-table v-if="selectForm.type=='未交'" :data="unSubs" style="width: 100%;margin-bottom: 25px">
+                <el-table-column prop="id" />
+            </el-table>
+            <el-table v-else :data="stuZuoyes" style="width: 100%;margin-bottom: 25px">
+                <el-table-column prop="id" />
+            </el-table>
+        </el-card>
+
         <div v-if="selectForm.type=='未交'">
-            <p v-for="unSub in unSubs" :key="unSub.id">{{unSub.name}}</p>
+            <el-table :data="unSubs" style=" margin-left: 9%;margin-right: 5%; width: 80%;height: 100%;; margin-top:20px ">
+                <el-table-column prop="id" label="学号" />
+                <el-table-column prop="name" label="姓名" />
+            </el-table>
         </div>
 
         <div v-else>
-            <el-card v-for="stuZuoye in stuZuoyes" :key="stuZuoye.id" style="margin-left: 50px; margin-right: 50px; margin-bottom:15px ">
+            <el-card v-for="stuZuoye in stuZuoyes" :key="stuZuoye.id" style="margin-left: 50px; margin-right: 450px; margin-bottom:15px ">
 
                 <div class="clearfix" style="margin-bottom: 0px">
                     <el-row>
@@ -44,9 +61,15 @@
 
                         <div v-for="(zy,index) in (stuZuoye.files_links.split('|'))" :key="index" style="margin-right: 20px;margin-bottom:50px;float: left;">
 
-                            <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'||(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
+                            <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'">
+                                <router-link :to="{ name: 'ZyPdfView', query: { stuZuoyeId: stuZuoye.id }}">
+                                    <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
+                                        height="80px" width="80px"/>
+                                </router-link>
+                            </div>
+                            <div v-else-if="(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
                                 <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
-                                    height="80px" width="80px">
+                                    height="80px" width="80px"/>
                             </div>
                             <div v-else>
                                 <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
@@ -205,6 +228,7 @@
                 var _type = 3;
                 if (this.selectForm.type == "已批") _type = 1;
                 else if (this.selectForm.type == "未批") _type = 0;
+                if (stuZuoye.comment == null) stuZuoye.comment = '';
                 if (stuZuoye.tassk.course.teacher.id == this.$store.state.user.id) {
                     this.postRequest("/szy/tchpg", {
                         id: stuZuoye.id,

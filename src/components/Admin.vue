@@ -229,6 +229,12 @@
                 _this.tchStatusVerifys(2, (_this.nowPage - 2) * 6)
               } else _this.tchisVerifys = resp.data;
             }
+            this.$notify({
+              title: '成功',
+              message: '审核该教师用户成功',
+              type: 'success',
+              duration: 2000
+            });
           }
         });
 

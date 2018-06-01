@@ -32,7 +32,8 @@
           <span>课程号:{{course.id}}</span>
           <div class="bottom clearfix">
             <time class="time"></time>
-            <el-button type="text" class="button">操作按钮</el-button>
+            <!-- <el-button type="text" class="button">操作按钮</el-button> -->
+            <p style="color: #2196f3">人数：{{course.id*10+2}}</p>
           </div>
         </div>
       </el-card>

@@ -21,7 +21,8 @@
     </el-collapse>
     <br/>
     <!-- 每个任务修改对话框 -->
-    <el-dialog v-if="$store.state.user.userlevel==1" :title="(zuoyes.length-ndx)+'、'+'  '+tassk.title" :visible.sync="dialogFormVisible" style="width: 1000px;margin-left: 300px ">
+    <el-dialog v-if="$store.state.user.userlevel==1" :title="(zuoyes.length-ndx)+'、'+'  '+tassk.title" :visible.sync="dialogFormVisible"
+      style="width: 1000px;margin-left: 300px ">
       <el-form :model="tassk" status-icon style="width: 100%;">
         <el-form-item label="标题" prop="name">
           <el-input v-model="tassk.title" placeholder="请输入课程名称"></el-input>
@@ -91,20 +92,20 @@
         </el-col>
       </el-row> -->
 
-      <div v-for="(zy,index) in (zuoye.files_links.split('|'))" :key="index" style="margin-right: 20px;margin-bottom:50px;float: left;">
-
-        <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'||(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
-          <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
-            height="80px" width="80px">
+      <div v-if="(zuoye.files_links)!=''">
+        <div v-for="(zy,index) in (zuoye.files_links.split('|'))" :key="index" style="margin-right: 20px;margin-bottom:50px;float: left;">
+          <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'||(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
+            <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
+              height="80px" width="80px">
+          </div>
+          <div v-else>
+            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
+          </div>
+          <div>
+            <a :href="zy" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>5?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,5)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
+            </a>
+          </div>
         </div>
-        <div v-else>
-          <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
-        </div>
-        <div>
-          <a :href="zy" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>5?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,5)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
-          </a>
-        </div>
-
       </div>
       <!-- </el-row> -->
     </el-card>
@@ -201,6 +202,9 @@
                 //_this.$set(_this.zuoyes,resp.data)
                 _this.zuoyes = resp.data;
                 console.log(resp.data);
+                _this.upLoadData.title = '';
+                _this.upLoadData.content = '';
+                _this.tasskFiles = '';
               }
             });
           } else
@@ -233,15 +237,17 @@
         this.tassk = task;
         this.ndx = index;
         this.tasskFiles = [];
-        var fls = task.files_links.split('|');
-        for (let fl in fls) {
-          this.filee = {};
-          this.$set(this.filee, 'name', (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1));
-          this.$set(this.filee, 'response', fls[fl]);
-          this.$set(this.filee, 'url', fls[fl]);
-          this.$set(this.filee, 'status', 'success');
-          console.log(this.filee);
-          this.tasskFiles.push(this.filee);
+        if (task.files_links != '') {
+          var fls = task.files_links.split('|');
+          for (let fl in fls) {
+            this.filee = {};
+            this.$set(this.filee, 'name', (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1));
+            this.$set(this.filee, 'response', fls[fl]);
+            this.$set(this.filee, 'url', fls[fl]);
+            this.$set(this.filee, 'status', 'success');
+            console.log(this.filee);
+            this.tasskFiles.push(this.filee);
+          }
         }
         this.dialogFormVisible = true;
       },
@@ -260,7 +266,7 @@
           files_links: this.tasskFilesHelps.join("|")
         }).then(resp => {
           if (resp && resp.status == 200 && resp.data != "") {
-            _this.$set(_this.zuoyes,  _this.ndx, resp.data);
+            _this.$set(_this.zuoyes, _this.ndx, resp.data);
             _this.$notify({
               title: "成功",
               message: "作业修改成功",

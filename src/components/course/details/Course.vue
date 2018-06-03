@@ -1,10 +1,8 @@
 <template>
-    <!-- <el-container> -->
-    <!-- <el-header style="text-align: center;display: flex; align-items: center; justify-content: space-between;
-        box-sizing: content-box;
-        padding: 0px;"> -->
+    <!-- default-active="/coursedetails/zuoye" -->
+   
     <div>
-        <el-menu mode="horizontal" unique-opened router default-active="/coursedetails/zuoye" style="text-align: center; display: flex;  align-items: center;">
+        <el-menu mode="horizontal" unique-opened router :default-active="defaultAct"  style="text-align: center; display: flex;  align-items: center;">
             <el-menu-item index="/coursedetails/zuoye" style="margin-left: 67px">作业</el-menu-item>
             <el-menu-item index="/coursedetails/member">成员</el-menu-item>
             <el-menu-item index="/coursedetails/tchstatistic">统计</el-menu-item>
@@ -24,14 +22,20 @@
     export default {
         data() {
             return {
-
+                defaultAct:''
             }
         },
         created: function () {
             if (this.$route.query.courseId != null || (typeof (this.$route.query.courseId) === 'undefined') == false) {
                 this.$store.commit('setCourseId', this.$route.query.courseId);
             }
-            this.$router.replace({path:'/coursedetails/zuoye'});
+            if(this.$route.name=='CourseDetails'){
+                this.defaultAct='/coursedetails/zuoye';
+                this.$router.replace({path:'/coursedetails/zuoye'});
+            }else{
+                this.defaultAct=this.$route.path;
+            }
+            //this.$router.replace({path:'/coursedetails/zuoye'});
         }
     }
 </script>

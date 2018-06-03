@@ -18,7 +18,7 @@
                     <el-table-column prop="student.id" label="uid" />
                     <el-table-column prop="student.name" label="学生姓名" />
                     <el-table-column prop="student.phone" label="电话" />
-                    <el-table-column label="操作">
+                    <el-table-column v-if="$store.state.user.userlevel==1" label="操作">
                         <template slot-scope="scope">
                             <el-button size="mini" @click="cutOne(scope.$index, 2 )">踢出</el-button>
                             <el-button size="mini" @click="seePsw(scope.$index)">查看密码</el-button>
@@ -36,8 +36,8 @@
                 <span>加入待审核</span>
                 <el-button style="float: right; padding: 3px 0" type="text">全部通过</el-button>
             </div>
-            <el-table :data="xkNoVerify.studentCourses" style="width: 100%">
-                 <el-table-column prop="student.id" label="uid" />
+            <el-table :data="xkNoVerify.studentCourses" style="width: 100%" stripe border>
+                <el-table-column prop="student.id" label="uid" />
                 <el-table-column prop="student.name" label="学生姓名">
                 </el-table-column>
                 <el-table-column prop="student.phone" label="电话">
@@ -46,6 +46,7 @@
                     <template slot-scope="scope">
                         <el-button size="mini" @click="intoVerify(scope.$index, 1 , 2)">通过</el-button>
                         <el-button size="mini" @click="intoVerify(scope.$index, 1 , 0)">不通过</el-button>
+                        <el-button size="mini" @click="cutOne(scope.$index, 1)">清除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -56,12 +57,16 @@
         <el-card v-if="$store.state.user.userlevel==1" class="member-el-card">
             <div slot="header" class="clearfix" style=" white-space:pre;">
                 <span>审核未通过</span>
-                <el-button style="float: right; padding: 3px 0" type="text">全部通过</el-button>
+                <el-button style="float: right; padding: 3px 0" type="text">全部清除</el-button>
             </div>
-            <el-table :data="xkIsConfuse.studentCourses" style="width: 100%">
-                <el-table-column prop="student.name" label="学生姓名">
-                </el-table-column>
-                <el-table-column prop="student.phone" label="电话">
+            <el-table :data="xkIsConfuse.studentCourses" style="width: 100%" stripe border>
+                <el-table-column prop="student.name" label="学生姓名" />
+                <el-table-column prop="student.phone" label="电话" />
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="intoVerify(scope.$index, 0 , 2)">通过</el-button>
+                        <el-button size="mini" @click="cutOne(scope.$index, 0)">清除</el-button>
+                    </template>
                 </el-table-column>
             </el-table>
             <el-pagination layout="prev, pager, next" :total="xkIsConfuse.page" :page-size="10" :current-page="renowPage" @current-change="xkIsConfusesPageChange"
@@ -79,7 +84,7 @@
                 course: {
                     teacher: {},
                 },
-                stuPsw:'',
+                stuPsw: '',
                 dialogFormVisible: false,
                 isnowPage: 1,
                 nonowPage: 1,
@@ -198,23 +203,23 @@
                         }
                         this.$notify({
                             title: "成功",
-                            message: "已将该学生踢出课程",
+                            message: "已将该学生清除课程",
                             type: "success",
                             duration: 2000
                         });
                     }
                 });
             },
-            seePsw: function (index) {            
+            seePsw: function (index) {
                 var _this = this;
                 this.postRequest("/xk/tchSeeStuPsw", {
                     tid: this.$store.state.user.id,
-                    sid:  this.xkIsVerify.studentCourses[index].student.id,
+                    sid: this.xkIsVerify.studentCourses[index].student.id,
                     cid: this.$store.state.courseId,
                 }).then(resp => {
                     if (resp && resp.status == 200) {
-                        _this.stuPsw=resp.data;
-                        _this.dialogFormVisible=true;
+                        _this.stuPsw = resp.data;
+                        _this.dialogFormVisible = true;
                     }
                 });
             },
@@ -280,6 +285,7 @@
                     }
                 });
             },
+
 
             onChanges: function (file, fileList) {
                 //console.log(file);

@@ -10,7 +10,7 @@
       </el-table>
     </el-card>
 
-    <el-card v-for="(task,index) in tasks" :key="index" style=" margin-right: 50px; margin-bottom:15px ">
+    <el-card v-for="(task,index) in tasks" :key="index" style=" margin-left: 10%;margin-right: 8%; width: 75%;; margin-top:20px ">
       <div slot="header" class="clearfix">
         <el-row>
           <el-col :span="10">
@@ -36,22 +36,22 @@
         <div class="pr">{{task.content}}</div>
       </div>
       <br/>
+      <div v-if="(task.files_links)!=''">
+        <div v-for="(zy,index) in (task.files_links.split('|'))" :key="index" style="margin-right: 20px;margin-bottom:50px;float: left;">
 
-      <div v-for="(zy,index) in (task.files_links.split('|'))" :key="index" style="margin-right: 20px;margin-bottom:50px;float: left;">
-
-        <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'||(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
-          <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
-            height="80px" width="80px">
-        </div>
-        <div v-else>
-          <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
-        </div>
-        <div>
-          <a :href="zy" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>5?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,5)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
-          </a>
+          <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'||(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
+            <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
+              height="80px" width="80px">
+          </div>
+          <div v-else>
+            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
+          </div>
+          <div>
+            <a :href="zy" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>5?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,5)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
+            </a>
+          </div>
         </div>
       </div>
-
     </el-card>
   </div>
 </template>

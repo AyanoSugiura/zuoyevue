@@ -47,7 +47,7 @@
               <router-link v-if="$store.state.user.userlevel==1" style="text-decoration:none" :to="{ name: 'TZyDetails', query: { taskId: zuoye.id }}">
                 <h3 class="work-title">{{(zuoyes.length-index)+'、'+' '+zuoye.title}}</h3>
               </router-link>
-              <router-link v-else-if="$store.state.user.userlevel==0" style="text-decoration:none" :to="{ name: 'SZyDetails', query: { taskId: zuoye }}">
+              <router-link v-else-if="$store.state.user.userlevel==0" style="text-decoration:none" :to="{ name: 'SZyDetails', query: { taskId: zuoye.id }}">
                 <h3 class="work-title">{{zuoye.title}}</h3>
               </router-link>
             </span>
@@ -224,7 +224,7 @@
         console.log(zy.title);
         this.$router.push({
           name: "SZyDetails",
-          query: { taskId: zy.id, taskTitle: zy.title, stuStatus: type }
+          query: { taskId: zy.id }
         });
         // if (type == "未提交") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 1 } });
         // else if (type == "未批改") this.$router.push({ name: 'SZyDetails', query: { taskId: zy.id, taskTitle: zy.title, stuStatus: 2 } });

@@ -1,15 +1,28 @@
 <template>
     <div>
         <div>
-            <i class="el-icon-document titles ">{{stuZuoye.tassk.title==null?(this.$route.query.taskTitle):stuZuoye.tassk.title}}</i>
+            <i class=" titles "></i>
         </div>
-        <el-card style="background-color: white;width: 800px;margin-left: 56px;">
+        <el-card style="width: 60%;margin-left: 18%;margin-top: 1%">
+            <div slot="header" class="clearfix">
+                <el-button type="text" style="float: right;margin-top: -25px" @click="returnPreZy">
+                    <i style="font-size:50px;" class="el-icon-close" />
+                </el-button>
+                <p class="setting-card-heading">
+
+                    <i class="el-icon-document"></i>
+                    <span>{{taskTitle}}</span>
+                </p>
+
+                <span style="clear:both" />
+            </div>
+            <p>课程名：{{stuZuoye.tassk.course.name}}</p>
             <el-row>
-                <el-col v-if="stuZuoye==null||stuZuoye.isPg==0||$route.query.stuStatus=='未提交'||$route.query.stuStatus=='未批改'" :span="22">
+                <el-col v-if="stuZuoye==null||stuZuoye.isPg==0" :span="22">
                     <el-upload class='ensure ensureButt' :action="importFileUrl" :onError="uploadError" :file-list="filesList" :onSuccess="uploadSuccess"
                         :on-change="onChanges" :before-remove="bRemove" :beforeUpload="beforeAvatarUpload">
                         <el-button slot="trigger" size="small" type="primary">上传文件</el-button>
-                        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-bind:disabled="isKong">{{(stuZuoye.id==null) ? '提交':'更新提交'}}</el-button>
+                        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-bind:disabled="isKong">{{(stuZuoye==null) ? '提交':'更新提交'}}</el-button>
                     </el-upload>
                 </el-col>
 
@@ -18,21 +31,21 @@
                 </el-col>
 
                 <el-col :span="2">
-                    <p v-if="stuZuoye==null||stuZuoye.isPg==0||$route.query.stuStatus=='未提交'||$route.query.stuStatus=='未批改'">{{(stuZuoye==null)?'未提交':'未批改'}}</p>
+                    <p v-if="stuZuoye==null||stuZuoye.isPg==0">{{(stuZuoye==null)?'未提交':'未批改'}}</p>
                     <p v-else>成绩：{{stuZuoye.score}}</p>
                 </el-col>
             </el-row>
 
-            <div v-if="stuZuoye==null||stuZuoye.isPg==0||$route.query.stuStatus=='未提交'||$route.query.stuStatus=='未批改'">
+            <div v-if="stuZuoye==null||stuZuoye.isPg==0">
                 <el-form ref="upLoadData" :model="upLoadData" label-width="70px" style="margin-top: 25px;">
                     <el-form-item label="作业留言" style="margin-right: 55px;">
-                        <el-input type="textarea" v-model="upLoadData.liuyan" placeholder="点击添加留言（仅老师可看）..."></el-input>
+                        <el-input type="textarea" v-model="upLoadData.liuyan" :rows="4" :autosize="{ minRows: 4, maxRows: 13 }" placeholder="点击添加留言（仅老师可看）..."></el-input>
                     </el-form-item>
                 </el-form>
             </div>
             <div v-else>
                 <el-row>
-                    <el-col v-for="zy in (stuZuoye.files_links.split('|'))" :key="zy.length">
+                    <el-col v-for="(zy,index) in (stuZuoye.files_links.split('|'))" :key="index">
                         <div style="margin-bottom:5px">
                             <a :href="zy">{{zy.substring(zy.lastIndexOf("/")+1)}} </a>
                         </div>
@@ -40,12 +53,12 @@
                 </el-row>
                 <el-form :model="upLoadData" label-width="70px" style="margin-top: 25px;">
                     <el-form-item label="作业留言" style="margin-right: 55px;">
-                        <el-input type="textarea" v-model="upLoadData.liuyan" :disabled="true"></el-input>
+                        <el-input id=xsly type="textarea" v-model="upLoadData.liuyan" :disabled="true"></el-input>
                     </el-form-item>
                 </el-form>
-                <el-form :model="upLoadData" label-width="70px" style="margin-top: 25px;">
+                <el-form  :model="upLoadData" label-width="70px" style="margin-top: 25px;">
                     <el-form-item label="老师评语" style="margin-right: 55px;">
-                        <el-input type="textarea" v-model="upLoadData.tchLiuyan" :disabled="true" placeholder="无"></el-input>
+                        <el-input id=jsly type="textarea" :rows="4" :autosize="{ minRows: 4, maxRows: 13 }" v-model="upLoadData.tchLiuyan" :disabled="true" placeholder="无"></el-input>
                     </el-form-item>
                 </el-form>
             </div>
@@ -74,6 +87,7 @@
                     status: "success",
                     url: ""
                 },
+                taskTitle: '',
                 courses: [],
                 filesList: [],
                 filesList2: [],
@@ -91,56 +105,36 @@
                 taskId: this.$route.query.taskId
             }).then(resp => {
                 console.log(resp);
-                if (resp && resp.status == 200 && resp.data != "") {
-                    _this.stuZuoye = resp.data;
-                    _this.upLoadData.liuyan = (_this.stuZuoye.content == null) ? '' : _this.stuZuoye.content;
-                    _this.upLoadData.tchLiuyan = (_this.stuZuoye.comment == null) ? '' : _this.stuZuoye.comment;
-                    _this.filesList = [];
-                    var fls = _this.stuZuoye.files_links.split('|');
-                    for (let fl in fls) {
-                        _this.filee={};
-                        this.$set(this.filee, 'name', (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1));
-                        this.$set(this.filee, 'response', fls[fl]);
-                        this.$set(this.filee, 'url', fls[fl]);
-                        this.$set(this.filee, 'status', 'success');
-                        _this.filesList.push(_this.filee);
+                if (resp && resp.status == 200) {
+                    if (resp.data != "") {
+                        _this.stuZuoye = resp.data;
+                        _this.taskTitle=resp.data.tassk.title
+                        _this.upLoadData.liuyan = (_this.stuZuoye.content == null) ? '' : _this.stuZuoye.content;
+                        _this.upLoadData.tchLiuyan = (_this.stuZuoye.comment == null) ? '' : _this.stuZuoye.comment;
+                        _this.filesList = [];
+                        var fls = _this.stuZuoye.files_links.split('|');
+                        for (let fl in fls) {
+                            _this.filee = {};
+                            this.$set(this.filee, 'name', (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1));
+                            this.$set(this.filee, 'response', fls[fl]);
+                            this.$set(this.filee, 'url', fls[fl]);
+                            this.$set(this.filee, 'status', 'success');
+                            _this.filesList.push(_this.filee);
+                        }
+                        console.log(_this.stuZuoye);
+                    } else {
+                        _this.stuZuoye = null;
+                        _this.postRequest("/task/taskTitle", {
+                            task_id: _this.$route.query.taskId
+                        }).then(resp => {
+                            if (resp && resp.status == 200) {
+                                _this.taskTitle = resp.data;
+                            }
+                        });
                     }
-                    console.log(_this.stuZuoye);
                 }
             });
 
-            // this.postRequest("/szy/szys", {
-            //     stuId: this.$store.state.user.id,
-            //     taskId: this.$route.query.taskId
-            // }).then(resp => {
-            //     console.log(resp);
-            //     if (resp && resp.status == 200 ) {
-            //         _this.stuZuoye = resp.data;
-            //         console.log( _this.stuZuoye);
-            //     }
-            //     else _this.$notify.error({
-            //         title: "没有该作业",
-            //         message: "请输入正确的url"
-            //     });
-            // });
-
-
-            // if (_this.stuZuoye.isPg == 0 || _this.$route.query.stuStatus == '未批改') {
-            //     this.postRequest("/szy/flielist", {
-            //         stuId: $store.state.user.id,
-            //         taskId: $route.query.taskId
-            //     }).then(resp => {
-            //         if (resp && resp.status == 200) {
-            //             console.log(resp.data);
-            //             for (let fl in resp.data.split('|')) {
-            //                 _this.filee.name = fl.substring(zy.lastIndexOf("/") + 1);
-            //                 _this.filee.response = fl;
-            //                 _this.filee.url = fl
-            //                 _this.filesList.push(_this.filee);
-            //             }
-            //         }
-            //     });
-            // }
         },
         computed: {
             isKong: function () {
@@ -161,7 +155,7 @@
                     files_links: this.filesList2.join("|")
                 }).then(resp => {
                     if (resp && resp.status == 200 && resp.data != "") {
-                        this.stuZuoye = resp.data;
+                        _this.stuZuoye = resp.data;
                         _this.upLoadData.liuyan = _this.stuZuoye.content;
                         _this.upLoadData.tchLiuyan = _this.stuZuoye.comment;
                         if (resp.data.subStatus == "提交成功") {
@@ -194,6 +188,9 @@
                             message: "请联系管理员"
                         });
                 });
+            },
+            returnPreZy: function () {
+                this.$router.push({ name: 'CourseDetails', query: { courseId: this.$route.query.courseId } })
             },
             onChanges: function (file, fileList) {
                 console.log(fileList);
@@ -252,4 +249,38 @@
         word-break: break-all;
         word-wrap: break-word;
     }
+
+    .setting-card-heading {
+        display: block;
+        font-size: 20px;
+        line-height: 28px;
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+
+    p {
+        display: block;
+        -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        margin: 12px 0;
+    }
+
+    #xsly {
+        background-color: white;
+        border-color: #e4e7ed;
+        color: #c0c4cc;
+        cursor: not-allowed;
+    }
+
+    #jsly {
+        background-color: white;
+        border-color: #e4e7ed;
+        color: #c0c4cc;
+        cursor: not-allowed;
+    }
+</style>
+
+<style lang="scss">
 </style>

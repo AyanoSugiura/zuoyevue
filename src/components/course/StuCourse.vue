@@ -40,10 +40,12 @@
 
         <el-main>
 
-            <el-card v-for="stuCourse in stuCourses" :key="stuCourse.id" style="width: 200px; height: 200px; margin: 10px; float:left" :body-style="{ padding: '0px' }">
+            <el-card v-for="stuCourse in stuCourses" :key="stuCourse.id" style="width: 206px; height: 206px; margin: 10px; float:left"
+                :body-style="{ padding: '0px' }">
                 <span style="font-family:'Microsoft YaHei';font-size:18px;color: white">
                     <div style="position: relative; width: 170px; height: 89px;">
-                        <img :src="'http://assets.ketangpai.com/theme/min/'+  (stuCourse.course.id<10?( '0' +stuCourse.course.id): (stuCourse.course.id%31) ) +'.jpg'" style="width:200px;height:100px">
+                        <img :src="'http://assets.ketangpai.com/theme/min/'+  (stuCourse.course.id<10?( '0' +stuCourse.course.id): (stuCourse.course.id%31) ) +'.jpg'"
+                            style="width:206px;height:103px">
                         <span style="position: absolute;top:15px;left: 15px; ">
                             <router-link v-if="stuCourse.verify==2" style="color:white;text-decoration:none" :to="{ name: 'CourseDetails', query: { courseId: stuCourse.course.id }}">{{stuCourse.course.name}}</router-link>
                             <span v-if="stuCourse.verify==1" style="color:white">{{stuCourse.course.name}}</span>
@@ -51,13 +53,26 @@
                     </div>
                 </span>
 
-                <div style="padding: 14px; white-space:pre;">
-                    <span>课程号:{{stuCourse.course.id+'  '}}</span>
+                <div style="padding-top: 20px;padding-left: 14px;padding-right: 14px;margin-bottom: 13px; white-space:pre;">
+                    <span>课程号:{{stuCourse.course.id+' '}}</span>
                     <span v-if="stuCourse.verify==1" style="color:red;">待审核</span>
-                    <div class="bottom clearfix">
-                        <time class="time"></time>
-                        <el-button type="text" class="button">操作按钮</el-button>
-                    </div>
+                </div>
+                <div style="margin-bottom: 6px" v-if="stuCourse.verify==2">
+                    <span class="recent_work">近期作业</span>
+                </div>
+                <div v-if="stuCourse.course.recentTriTaskId!=null&&stuCourse.verify==2">
+                    <span class="recent_work2" :title="stuCourse.course.recentTriTaskTitle.length>9?stuCourse.course.recentTriTaskTitle.substring(0,9)+'...':stuCourse.course.recentTriTaskTitle">
+                        <router-link style="text-decoration:none" v-if="$store.state.user.userlevel==0" :to="{ name: 'SZyDetails', query: { taskId: stuCourse.course.recentTriTaskId }}">
+                            {{stuCourse.course.recentTriTaskTitle.length>7?stuCourse.course.recentTriTaskTitle.substring(0,7)+'...':stuCourse.course.recentTriTaskTitle}}
+                        </router-link>
+                    </span>
+                </div>
+                <div v-else>
+                    <br/>
+                </div>
+
+                <div style="padding-right:5px ;margin-bottom:5px " v-if="stuCourse.verify==2">
+                    <span class="cardmbr hy">成员{{stuCourse.course.stuNum}}</span>
                 </div>
             </el-card>
 
@@ -200,3 +215,70 @@
         }
     }
 </script>
+<style>
+  .ktcon {
+    padding-left: 40px;
+    height: 100%;
+    overflow: hidden;
+    background: #ececec;
+    padding-top: 93px;
+  }
+
+  .ktcon1l {
+    cursor: pointer;
+    padding-left: 23px;
+    height: 16px;
+    line-height: 16px;
+    color: #272636;
+    font-size: 16px;
+  }
+
+  .fl {
+    float: left;
+  }
+
+  .ktcon1 {
+    height: 16px;
+    padding-bottom: 25px;
+    padding-right: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cl {
+    clear: both;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .clearfix {
+    zoom: 1;
+  }
+
+  .cardmbr.hy {
+    cursor: pointer;
+    display: block;
+    line-height: 20px;
+    font-size: 12px;
+    float: right;
+    padding-left: 24px;
+    height: 20px;
+    color: #818181;
+    background: url(http://www.ketangpai.com/Public/Common/img/ren.png) 0 1px no-repeat;
+  }
+
+  .recent_work {
+    padding: 14px;
+    font-size: 14px;
+    font-family: 微软雅黑;
+    color: #ababab;
+  }
+  .recent_work2 {
+    padding: 14px;
+    font-size: 13px;
+    font-family: 微软雅黑;
+    color: black;
+  }
+</style>

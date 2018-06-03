@@ -30,7 +30,7 @@
                     <el-input type="textarea" v-model="stuZuoye.content" :autosize="{ minRows: 2, maxRows: 6 }" :disabled="true" placeholder="无"></el-input>
                 </el-form-item>
                 <el-form-item class="upput_msg" label="老师评语" style="margin-right: 55px;">
-                    <el-input type="textarea" v-model="stuZuoye.comment" :autosize="{ minRows: 5, maxRows: 13 }" placeholder="点击添加评论（仅改作业的学生可看）..."></el-input>
+                    <el-input type="textarea" v-model="stuZuoye.comment" :autosize="{ minRows: 5, maxRows: 13 }" placeholder="点击添加评论（仅该作业的学生可看）..."></el-input>
                 </el-form-item>
             </el-form>
             <el-button style="margin-right: 55px;margin-bottom : 35px;float: right;" size="mini" type="success" plain @click="submitPg">{{(stuZuoye.isPg==0) ? '提交':'更改批改'}}</el-button>

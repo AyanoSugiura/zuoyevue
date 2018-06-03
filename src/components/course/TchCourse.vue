@@ -18,23 +18,34 @@
 
     <el-main>
 
-      <el-card v-for="course in courses" :key="course.id" style="width: 200px; height: 200px; margin: 10px; float:left" :body-style="{ padding: '0px' }">
+      <el-card v-for="course in courses" :key="course.id" style="width: 206px; height: 206px; margin: 10px; float:left" :body-style="{ padding: '0px' }">
         <span style="font-family:'Microsoft YaHei';font-size:18px;color: white">
           <div style="position: relative; width: 170px; height: 89px;">
-            <img :src="'http://assets.ketangpai.com/theme/min/'+  (course.id<10?( '0' +course.id):course.id) +'.jpg'" style="width:200px;height:100px">
+            <img :src="'http://assets.ketangpai.com/theme/min/'+  (course.id<10?( '0' +course.id):course.id) +'.jpg'" style="width:206px;height:103px">
             <span style="position: absolute;top:15px;left: 15px; ">
               <router-link style="color:white;text-decoration:none" :to="{ name: 'CourseDetails', query: { courseId: course.id }}">{{course.name}}</router-link>
             </span>
           </div>
         </span>
 
-        <div style="padding: 14px;">
+        <div style="padding-top: 20px;padding-left: 14px;padding-right: 14px;margin-bottom: 13px">
           <span>课程号:{{course.id}}</span>
-          <div class="bottom clearfix">
-            <time class="time"></time>
-            <!-- <el-button type="text" class="button">操作按钮</el-button> -->
-            <p style="color: #2196f3">人数：{{course.id*10+2}}</p>
-          </div>
+        </div>
+        <div style="margin-bottom: 6px">
+          <span class="recent_work">近期作业</span>
+        </div>
+        <div v-if="course.recentTriTaskId!=null">
+          <span class="recent_work2" :title="course.recentTriTaskTitle.length>9?course.recentTriTaskTitle.substring(0,9)+'...':course.recentTriTaskTitle">
+            <router-link style="text-decoration:none" v-if="$store.state.user.userlevel==1" :to="{ name: 'TZyDetails', query: { taskId: course.recentTriTaskId }}">
+              {{course.recentTriTaskTitle.length>7?course.recentTriTaskTitle.substring(0,7)+'...':course.recentTriTaskTitle}}
+            </router-link>
+          </span>
+        </div>
+        <div v-else>
+          <br/>
+        </div>
+        <div style="padding-right:5px ;margin-bottom:5px ">
+          <span class="cardmbr hy">成员{{course.stuNum}}</span>
         </div>
       </el-card>
 
@@ -90,7 +101,7 @@
       console.log(this.$store.state.user.id);
       if (this.$store.state.user.userlevel == 1) {
         this.postRequest("/course/tchcoursesbp", {
-          phone: this.$store.state.user.phone,
+          tid: this.$store.state.user.id,
         }).then(resp => {
           if (resp && resp.status == 200) {
             console.log(resp.data);
@@ -123,7 +134,7 @@
             });
 
             _this.postRequest("/course/tchcoursesbp", {
-              phone: this.$store.state.user.phone,
+              tid: this.$store.state.user.id,
             }).then(resp => {
               if (resp && resp.status == 200) {
                 console.log(resp.data);
@@ -186,5 +197,30 @@
 
   .clearfix {
     zoom: 1;
+  }
+
+  .cardmbr.hy {
+    cursor: pointer;
+    display: block;
+    line-height: 20px;
+    font-size: 12px;
+    float: right;
+    padding-left: 24px;
+    height: 20px;
+    color: #818181;
+    background: url(http://www.ketangpai.com/Public/Common/img/ren.png) 0 1px no-repeat;
+  }
+
+  .recent_work {
+    padding: 14px;
+    font-size: 14px;
+    font-family: 微软雅黑;
+    color: #ababab;
+  }
+  .recent_work2 {
+    padding: 14px;
+    font-size: 13px;
+    font-family: 微软雅黑;
+    color: black;
   }
 </style>

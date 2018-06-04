@@ -34,7 +34,7 @@
         <el-card v-if="$store.state.user.userlevel==1" class="member-el-card">
             <div slot="header" class="clearfix" style=" white-space:pre;">
                 <span>加入待审核</span>
-                <el-button style="float: right; padding: 3px 0" type="text">全部通过</el-button>
+                <el-button style="float: right; padding: 3px 0" type="text"></el-button>
             </div>
             <el-table :data="xkNoVerify.studentCourses" style="width: 100%" stripe border>
                 <el-table-column prop="student.id" label="uid" />

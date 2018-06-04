@@ -93,6 +93,7 @@
                         <el-input type="textarea" v-model="stuZuoye.comment" placeholder="点击添加评论（仅改作业的学生可看）..."></el-input>
                     </el-form-item>
                 </el-form>
+                <el-button v-if="selectForm.type=='已批'" round style="margin-left: 22px;" @click="killBack(stuZuoye)">打回作业</el-button>
                 <el-button style="margin-right: 55px;margin-bottom : 35px;float: right;" type="success" plain @click="submitPg(stuZuoye)"
                     v-bind:disabled="isKong">{{(stuZuoye.isPg==0) ? '提交':'更改批改'}}</el-button>
                 <el-select v-model="stuZuoye.score" placeholder="请打分" style="margin-right: 55px;margin-bottom : 35px;float: right;">
@@ -245,6 +246,32 @@
                                 message: _type == 1 ? "作业已更新批改" : "批改成功",
                                 type: "success",
                                 duration: 2000
+                            });
+                        }
+                    });
+                }
+            },
+            killBack: function (stuZuoye) {
+                var _this = this;
+                if (stuZuoye.tassk.course.teacher.id == this.$store.state.user.id) {
+                    this.postRequest("/szy/killBack", {
+                        tid: this.$store.state.user.id,
+                        id: stuZuoye.id,
+                        taskId: this.$route.query.taskId
+                    }).then(resp => {
+                        if (resp && resp.status == 200) {
+                            if (resp.data != "你没有权限打回该作业") {
+                                _this.stuZuoyes = resp.data;
+                                _this.$notify({
+                                    title: "成功",
+                                    message: "作业已成功打回",
+                                    type: "success",
+                                    duration: 2000
+                                });
+                            }
+                            else _this.$notify.error({
+                                title: '失败',
+                                message: '你没有权限打回该作业'
                             });
                         }
                     });

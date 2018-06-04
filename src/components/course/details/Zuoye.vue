@@ -11,7 +11,7 @@
             <el-input type="textarea" v-model="upLoadData.content"></el-input>
           </el-form-item>
 
-          <el-upload class='ensure ensureButt' style="width: 500px;margin-left: 35px;" :action="importFileUrl" :onError="uploadError"
+          <el-upload class='ensure ensureButt' style="width: 500px;margin-left: 35px;" :file-list="filesList" :action="importFileUrl" :onError="uploadError"
             :onSuccess="uploadSuccess" :on-change="onChanges" :before-remove="bRemove" :beforeUpload="beforeAvatarUpload">
             <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload" v-bind:disabled="isKong">发布作业</el-button>
@@ -192,7 +192,7 @@
               type: "success",
               duration: 2000
             });
-
+            _this.filesList=[];
             this.postRequest("/szy/taskbc", {
               cid: this.$store.state.courseId,
               uid: this.$store.state.user.id,

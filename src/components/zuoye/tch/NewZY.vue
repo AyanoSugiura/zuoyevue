@@ -142,14 +142,16 @@
                 this.tassk = task;
                 this.ndx = index;
                 this.tasskFiles = [];
-                var fls = task.files_links.split('|');
-                for (let fl in fls) {
-                    let filee = {};
-                    this.$set(filee, 'name', (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1));
-                    this.$set(filee, 'response', fls[fl]);
-                    this.$set(filee, 'url', fls[fl]);
-                    this.$set(filee, 'status', 'success');
-                    this.tasskFiles.push(filee);
+                if (task.files_links != '') {
+                    var fls = task.files_links.split('|');
+                    for (let fl in fls) {
+                        let filee = {};
+                        this.$set(filee, 'name', (fls[fl]).substring(fls[fl].lastIndexOf("/") + 1));
+                        this.$set(filee, 'response', fls[fl]);
+                        this.$set(filee, 'url', fls[fl]);
+                        this.$set(filee, 'status', 'success');
+                        this.tasskFiles.push(filee);
+                    }
                 }
                 this.dialogFormVisible = true;
             },

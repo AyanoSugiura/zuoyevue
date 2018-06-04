@@ -102,7 +102,7 @@
             <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
           </div>
           <div>
-            <a :href="zy" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>5?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,5)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
+            <a :href="zy" class="file_font" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>6?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,6)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
             </a>
           </div>
         </div>
@@ -355,5 +355,10 @@
     border-left-width: 1px;
 
     padding: 0px 43px 0px 18px;
+  }
+
+   .file_font {
+    font-size: 12.6px;
+    font-family: 微软雅黑;
   }
 </style>

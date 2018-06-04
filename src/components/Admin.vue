@@ -1,9 +1,14 @@
 <template>
   <div>
+    <!-- 密码对话框 -->
+    <el-dialog title="密码" :visible.sync="dialogFormVisible" style="width: 25%;margin-left: 30%">
+      <p>{{userPsw}}</p>
+    </el-dialog>
+    <!-- 管理 -->
     <el-row style="margin-left: 7%;margin-right: 7%;margin-top: 25px">
 
       <el-col :span="12">
-        <el-card>
+        <el-card style="margin-bottom: 25px">
           <div slot="header" class="clearfix">
             <p class="setting-card-heading">待审核教师</p>
           </div>
@@ -21,25 +26,25 @@
           <el-pagination layout="prev, pager, next" ref="noVPage" :total="tchNoVerify" :page-size="6" :current-page="nowPage" @current-change="NoVerifysPageChange">
           </el-pagination>
         </el-card>
-
+        <!-- 用户管理 -->
         <el-card>
           <div slot="header" class="clearfix">
-            <p class="setting-card-heading">修改密码</p>
+            <p class="setting-card-heading">用户管理</p>
           </div>
-          <el-form :model="xMsg" status-icon label-width="100px" style="margin-right: 100px">
-            <el-form-item label="当前密码">
-              <el-input v-model="xMsg.password" type="password" auto-complete="off" placeholder="当前密码"></el-input>
-            </el-form-item>
-            <el-form-item label="新的密码">
-              <el-input v-model="xMsg.newpsw" type="password" auto-complete="off" placeholder="新的密码"></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码">
-              <el-input v-model="xMsg.repsw" type="password" auto-complete="off" placeholder="确认密码"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button style="float: right;width: 100px;" size="small" type="success" @click="alterPsw" v-bind:disabled="pswV">修改</el-button>
-            </el-form-item>
-          </el-form>
+          <el-table :data="users.users" style="width: 100%;margin-bottom: 25px">
+            <el-table-column prop="id" label="id" />
+            <el-table-column prop="name" label="姓名" />
+            <el-table-column prop="phone" label="电话" />
+            <el-table-column prop="userlevel" label="等级" />
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button size="mini" @click="seePsw(scope.$index)">查看密码</el-button>
+                <!-- <el-button size="mini" @click="intoVerify(scope.$index, 1 , 0)">不通过</el-button> -->
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination layout="prev, pager, next" :total="users.page" :page-size="6" :current-page="userPage" @current-change="usersPageChange">
+          </el-pagination>
         </el-card>
       </el-col>
 
@@ -108,7 +113,12 @@
         tchIsConfuse: null,
         tchisVerifys: [],
         tchNoVerifys: [],
-        tchIsConfuses: []
+        tchIsConfuses: [],
+
+        users: [],
+        userPage: 1,
+        userPsw:'',
+        dialogFormVisible: false,
       };
     },
     created: function () {
@@ -123,6 +133,16 @@
       });
 
       this.tchStatusVerifys(1, 0);
+
+      this.postRequest("/admin/usersPage", {
+        aid: this.$store.state.user.id,
+        start: 0,
+        page: 6
+      }).then(resp => {
+        if (resp && resp.status == 200 && resp.data != "") {
+          _this.users = resp.data;
+        }
+      });
     },
     computed: {
       pswV: function () {
@@ -254,6 +274,33 @@
             _this.tchNoVerifys = resp.data.users; _this.tchNoVerify = resp.data.page
           }
         });
+      },
+      seePsw: function (index) {
+        var _this = this;
+        this.postRequest("/admin/seePsw", {
+          aid: this.$store.state.user.id,
+          uid: this.users.users[index].id,
+        }).then(resp => {
+          if (resp && resp.status == 200) {
+            _this.userPsw = resp.data;
+            _this.dialogFormVisible = true;
+          }
+        });
+      },
+      usersPageChange: function (e) {
+        this.userPage = e;
+        var _this = this;
+
+        this.postRequest("/admin/usersPage", {
+          aid: this.$store.state.user.id,
+          start: (e - 1) * 6,
+          page: 6
+        }).then(resp => {
+          if (resp && resp.status == 200 && resp.data != "") {
+            _this.users = resp.data;
+          }
+        });
+
       },
 
       tchStatusVerifys: function (vrf, start) {

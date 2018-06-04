@@ -1,7 +1,10 @@
 <template>
     <div>
-        <div>
-            <el-table :data="studentWorks"  style=" margin-left: 10%;margin-right: 8%; width: 75%;; margin-top:20px ">
+        <el-card style=" margin-left: 10%;margin-right: 8%; width: 75%;min-height: 500px; margin-top:20px ">
+            <div slot="header" class="clearfix">
+                <p class="setting-card-heading">成绩汇总</p>
+            </div>
+            <el-table :data="studentWorks" >
                 <el-table-column prop="tassk.course.name" label="课程名字">
                 </el-table-column>
                 <el-table-column prop="tassk.title" label="作业名">
@@ -9,7 +12,7 @@
                 <el-table-column prop="score" label="成绩">
                 </el-table-column>
             </el-table>
-        </div>
+        </el-card>
     </div>
 </template>
 

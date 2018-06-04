@@ -65,7 +65,6 @@
             this.postRequest("/szy/getById", {
                 sw_id: this.$route.query.stuZuoyeId,
             }).then(resp => {
-                console.log(resp.data);
                 if (resp && resp.status == 200 && resp.data != "") {
                     _this.stuZuoye = resp.data;
                     let fls = _this.stuZuoye.files_links.split('|');
@@ -76,11 +75,11 @@
                             _this.aFilesList.push(fls[fl]);
                         }
                     }
-                    _this.selectFile = _this.aFilesList[0];
-                    if (_this.aFilesList.length > 0 && (_this.aFilesList[0].substring(_this.aFilesList[0].lastIndexOf('.')) == '.pdf')) {
-                        _this.showPDF(_this.aFilesList[0]);
-                    } else if (_this.aFilesList.length > 0) {
-                        _this.showPDF('http://localhost:8089/files/getfiletopdf/' + _this.aFilesList[0].substring(_this.aFilesList[0].lastIndexOf("/") + 1));
+                    _this.selectFile = fls[_this.$route.query.index];
+                    if (_this.selectFile.length > 0 && (_this.selectFile.substring(_this.selectFile.lastIndexOf('.')) == '.pdf')) {
+                        _this.showPDF(_this.selectFile);
+                    } else if (_this.selectFile.length > 0) {
+                        _this.showPDF('http://localhost:8089/files/getfiletopdf/' + _this.selectFile.substring(_this.selectFile.lastIndexOf("/") + 1));
                     }
                 }
             });

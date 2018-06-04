@@ -12,8 +12,8 @@
             </i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>个人中心</el-dropdown-item>
-            <el-dropdown-item>设置</el-dropdown-item>
+            <!-- <el-dropdown-item>个人中心</el-dropdown-item>
+            <el-dropdown-item>设置</el-dropdown-item> -->
             <el-dropdown-item command="logout" divided>注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>

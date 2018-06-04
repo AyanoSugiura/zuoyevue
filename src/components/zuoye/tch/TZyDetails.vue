@@ -32,7 +32,7 @@
         </div>
 
         <div v-else>
-            <el-card v-for="stuZuoye in stuZuoyes" :key="stuZuoye.id" style="margin-left: 50px; margin-right: 450px; margin-bottom:15px ">
+            <el-card v-for="(stuZuoye,index) in stuZuoyes" :key="stuZuoye.id" style="margin-left: 50px; margin-right: 450px; margin-bottom:15px ">
 
                 <div class="clearfix" style="margin-bottom: 0px">
                     <el-row>
@@ -62,27 +62,27 @@
                         <div v-for="(zy,index) in (stuZuoye.files_links.split('|'))" :key="index" style="margin-right: 20px;margin-bottom:50px;float: left;">
 
                             <div v-if="(zy.substring(zy.lastIndexOf('.')))=='.doc'||(zy.substring(zy.lastIndexOf('.')))=='.docx'||(zy.substring(zy.lastIndexOf('.')))=='.xls'||(zy.substring(zy.lastIndexOf('.')))=='.xlsx'||(zy.substring(zy.lastIndexOf('.')))=='.ppt'||(zy.substring(zy.lastIndexOf('.')))=='.pptx'||(zy.substring(zy.lastIndexOf('.')))=='.pdf'">
-                                <router-link :to="{ name: 'ZyPdfView', query: { stuZuoyeId: stuZuoye.id }}">
+                                <router-link :to="{ name: 'ZyPdfView', query: { stuZuoyeId: stuZuoye.id,index:index }}">
                                     <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
-                                        height="80px" width="80px"/>
+                                        height="80px" width="80px" />
                                 </router-link>
                             </div>
                             <div v-else-if="(zy.substring(zy.lastIndexOf('.')))=='.txt'||(zy.substring(zy.lastIndexOf('.')))=='.zip'  ">
                                 <img :src="'https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_'+((zy.substring(zy.lastIndexOf('.'))).substr(1))+'.png'"
-                                    height="80px" width="80px"/>
+                                    height="80px" width="80px" />
                             </div>
                             <div v-else>
                                 <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_others.png" height="80px" width="80px">
                             </div>
                             <div>
-                                <a :href="zy" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>5?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,5)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
+                                <a :href="zy" class="file_font" style="text-decoration:none">{{((zy.substring(zy.lastIndexOf("/")+1).length)>6?((zy.substring(zy.lastIndexOf("/")+1)).substring(0,6)):(zy.substring(zy.lastIndexOf("/")+1)))+'...'}}
                                 </a>
                             </div>
 
                         </div>
                         <el-form label-width="70px" style="margin-top: 25px;clear:both">
                             <el-form-item label="作业留言" style="margin-right: 55px;">
-                                <el-input type="textarea" v-model="stuZuoye.content" :disabled="true" placeholder="无"></el-input>
+                                <el-input :id="'xsly_'+index" type="textarea" v-model="stuZuoye.content" :disabled="true" placeholder="无"></el-input>
                             </el-form-item>
                         </el-form>
                     </el-collapse-item>
@@ -322,5 +322,17 @@
         border-left-width: 1px;
 
         padding: 0px 43px 0px 18px;
+    }
+
+    .file_font {
+        font-size: 12.6px;
+        font-family: 微软雅黑;
+    }
+
+    [id^='xsly_'] {
+        background-color: white;
+        border-color: #e4e7ed;
+        color: #c0c4cc;
+        cursor: not-allowed;
     }
 </style>

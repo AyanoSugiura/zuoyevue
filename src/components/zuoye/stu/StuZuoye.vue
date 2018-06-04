@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 最新作业的为空时 -->
-    <el-card v-if="tasks==null||tasks.length==0" style=" margin-left: 9%;margin-right: 5%; width: 80%;height: 100%;; margin-top:20px ">
+    <el-card v-if="tasks==null||tasks.length==0" style=" margin-left: 9%;margin-right: 5%;min-height: 500px ;width: 80%;height: 100%;; margin-top:20px ">
       <div slot="header" class="clearfix">
         <p class="setting-card-heading">最新作业</p>
       </div>
